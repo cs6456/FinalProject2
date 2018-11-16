@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <section>
+        <div id = "drawingTools">
+            <div id="colors">
+                <button id="black" onclick="changeColor('black')"></button>
+                <button id="white" onclick="changeColor('white')"></button>
+                <button id="red" onclick="changeColor('red')"></button>
+                <button id="green" onclick="changeColor('green')"></button>
+                <button id="blue" onclick="changeColor('blue')"></button>
+            </div>
+            <div id="otherTools">
+                <button id="clearCanvas" onclick="clearCanvas()">C</button>
+                <button id="brushSize1" onclick="changeBrushSize(5)">1</button>
+                <button id="brushSize2" onclick="changeBrushSize(20)">2</button>
+                <button id="brushSize3" onclick="changeBrushSize(30)">3</button>
+                <button id="brushSize4" onclick="changeBrushSize(40)">4</button><br/>
+                <button id="fillCanvas" onclick="fillCanvas()">F</button>
+                <button id="buttBrush" onclick="changeBrushStyle('butt')">Butt</button>
+                <button id="squareBrush" onclick="changeBrushStyle('square')">Square</button>
+                <button id="roundBrush" onclick="changeBrushStyle('round')">Round</button>
+                <button id="openFile" onclick="triggerClick()">open</button>
+            </div>
+        </div>
+        <canvas id="canvas" width="800" height="500"></canvas>
+        <input id="file" type="file" accept="image/*" />
+    </section>
+
+</body>
+<script src="script.js"></script>
+</html>
