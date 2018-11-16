@@ -13,7 +13,7 @@ button {
     border: 0;
 }
 #drawingTools {
-    width: 800px;
+    width: 1300px;
     height: 135px;
     margin: 0px auto;
 }
@@ -23,7 +23,7 @@ button {
 }
 #colors button {
     width: 20%;
-    height: 10px;
+    height: 30px;
     margin-top: 5px;
     float: left;
 }
@@ -67,3 +67,42 @@ button {
 #buttBrush, #squareBrush, #roundBrush {font: 18px "Arial Black";}
 #otherTools #openFile {font: 25px "Arial Black";}
 #file { visibility: hidden;}
+
+#sidebar {
+    text-align: center;
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background:rgba(21,23,25,0.9);
+    left: 0px;
+    transition: all 500ms linear;
+}
+#sidebar ul {
+    text-align: center;
+}
+#sidebar ul li {
+    display: inline;
+    list-style: none;
+    text-decoration: none;
+    color: rgba(230, 230, 230, 0.9);
+    padding: 15px 15px;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.3);
+    font-size:48px;
+    margin-right: 50px;
+    color:white;
+}
+#sidebar .toggle-btn {
+    position:absolute;
+    height:100%;
+    width: 100px;
+    left: 330px;
+    top:600px;
+}
+#sidebar .toggle-btn span{
+    display: block;
+    width: 30px;
+    height: 5px;
+    background: #151719;
+    margin: 5px 0px;
+}
+
