@@ -5,25 +5,50 @@ var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 context.lineWidth = 5;
 var down = false;
+var mode = 'pencil';
+var background = 'white';
 canvas.addEventListener('touchmove', draw);
 canvas.addEventListener('touchstart', function(e) {
-    down = true;
-    context.beginPath();
-    xPos = e.touches[0].clientX - canvas.offsetLeft;
-    yPos =e.touches[0].clientY - canvas.offsetTop;
-    context.moveTo(xPos, yPos);
-    canvas.addEventListener("touchmove", draw);
+    if (mode === 'pencil') {
+        down = true;
+        context.beginPath();
+        xPos = e.touches[0].clientX - canvas.offsetLeft;
+        yPos =e.touches[0].clientY - canvas.offsetTop;
+        context.moveTo(xPos, yPos);
+        canvas.addEventListener("touchmove", draw);
+    } else if (mode === 'eraser') {
+        down = true;
+        context.beginPath();
+        xPos = e.touches[0].clientX - canvas.offsetLeft;
+        yPos =e.touches[0].clientY - canvas.offsetTop;
+        context.moveTo(xPos, yPos);
+        canvas.addEventListener("touchmove", draw);
+    }
+
 });
 canvas.addEventListener('touchend', function() {
     down = false;
 });
 function draw(e){
-    xPos = e.touches[0].clientX - canvas.offsetLeft;
-    yPos =e.touches[0].clientY - canvas.offsetTop;
-    if (down == true) {
-        context.lineTo(xPos, yPos);
-        context.stroke();
+    console.log('mode: ' + mode)
+    if (mode === 'eraser') {
+        context.strokeStyle = background;
+        context.fillStyle = background;
+        xPos = e.touches[0].clientX - canvas.offsetLeft;
+        yPos =e.touches[0].clientY - canvas.offsetTop;
+        if (down == true) {
+            context.lineTo(xPos, yPos);
+            context.stroke();
+        }
+    } else {
+        xPos = e.touches[0].clientX - canvas.offsetLeft;
+        yPos =e.touches[0].clientY - canvas.offsetTop;
+        if (down == true) {
+            context.lineTo(xPos, yPos);
+            context.stroke();
+        }
     }
+
 }
 function changeColor(color){
     context.strokeStyle = color;
@@ -35,7 +60,11 @@ function clearCanvas() {
 function changeBrushSize(size) {
     context.lineWidth = size;
 }
-function fillCanvas() {context.fillRect(0, 0, canvas.width, canvas.height);}
+function fillCanvas() {
+    background = context.fillStyle;
+    console.log(background);
+    context.fillRect(0, 0, canvas.width, canvas.height);
+}
 function changeBrushStyle(brushStyle) {context.lineCap = brushStyle;}
 function triggerClick() {document.getElementById('file').click();}
 document.getElementById('file').addEventListener('change', function(e) {
@@ -78,4 +107,7 @@ function sideBarTouchEnd(event) {
     } else {
         sidebar.style.left = '0px';
     }
+}
+function changeMode(curMode) {
+ mode = curMode;
 }
