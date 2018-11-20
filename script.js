@@ -1,7 +1,6 @@
 var sidebar = document.getElementById('sidebar');
 var sidebarStartX;
 var sidebarEndX;
-var pokemon;
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 context.lineWidth = 5;
