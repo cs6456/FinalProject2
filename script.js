@@ -19,6 +19,9 @@ var timer = null; // timer for tap and hold function
 // an array of objects that define different strokes
 var strokes = [];
 
+// an array of objects that define different eraser strokes
+var eraser_strokes = [];
+
 // an array of objects that define different rectangles
 var rects=[];
 var new_rectangle_made = false; //Flag to tell if a new rectangle is made or not
@@ -49,6 +52,10 @@ var background = 'white';
 //Variables for strokes
 var startX;
 var startY;
+
+//Variables for eraser strokes
+var startX_eraser;
+var startY_eraser;
 
 window.onload=function(){
     init();
@@ -306,11 +313,11 @@ canvas.addEventListener('touchstart', function(e) {
         //canvas.addEventListener("touchmove", draw);
     } else if (mode === 'eraser') {
         down = true;
-        context.beginPath();
-        xPos = e.touches[0].clientX - canvas.offsetLeft;
-        yPos =e.touches[0].clientY - canvas.offsetTop;
-        context.moveTo(xPos, yPos);
-        canvas.addEventListener("touchmove", draw);
+        //context.beginPath();
+        startX_eraser = e.touches[0].clientX - canvas.offsetLeft;
+        startY_eraser = e.touches[0].clientY - canvas.offsetTop;
+        //context.moveTo(xPos, yPos);
+        //canvas.addEventListener("touchmove", draw);
     }
 });
 
@@ -331,16 +338,30 @@ canvas.addEventListener('touchend', function(e) {
 
 function draw(e){
     //Modes
-    clearCanvas();
+    if(dragok_circle || dragok_rectangle){
+        clearCanvas();
+    }
     console.log('mode: ' + mode)
     if (mode === 'eraser') {
         context.strokeStyle = background;
         context.fillStyle = background;
+        if(eraser_strokes.length   >0){
+            for(var i=0; i<eraser_strokes.length;i++){
+                var s = eraser_strokes[i];
+                context.moveTo(s.start_X,s.start_Y);
+                context.lineTo(s.end_X,s.end_Y);
+                context.stroke();
+            }
+        }
         xPos = e.touches[0].clientX - canvas.offsetLeft;
-        yPos =e.touches[0].clientY - canvas.offsetTop;
+        yPos = e.touches[0].clientY - canvas.offsetTop;
         if (down == true) {
+            context.moveTo(startX_eraser, startY_eraser);
             context.lineTo(xPos, yPos);
             context.stroke();
+            strokes.push({start_X:startX_eraser, start_Y: startY_eraser, end_X: xPos, end_Y: yPos});
+            startX_eraser = xPos;
+            startY_eraser = yPos;
         }
     } else {
         //Draw all previous strokes
