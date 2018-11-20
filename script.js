@@ -16,6 +16,9 @@ var colorslider = document.getElementById('colorRange');
 
 var timer = null; // timer for tap and hold function
 
+// an array of objects that define different strokes
+var strokes = [];
+
 // an array of objects that define different rectangles
 var rects=[];
 var new_rectangle_made = false; //Flag to tell if a new rectangle is made or not
@@ -43,6 +46,10 @@ var down = false;
 var mode = 'pencil';
 var background = 'white';
 
+//Variables for strokes
+var startX;
+var startY;
+
 window.onload=function(){
     init();
 };
@@ -65,8 +72,11 @@ function init(){
 function rect(x,y,w,h) {
     context.beginPath();
     context.rect(x,y,w,h);
+    context.lineWidth = 3;
+    context.strokeStyle = "black";
+    context.stroke();
     context.closePath();
-    context.fill();
+    //context.fill();
 }
 
 //Make circle shape function
@@ -77,7 +87,7 @@ function circle(x,y,r,fill,stroke){
     context.arc(x, y, r, startingAngle, endAngle);
     context.fillStyle = fill;
     context.lineWidth = 3;
-    context.fill();
+    //context.fill();
     context.strokeStyle = stroke;
     context.stroke();
 }
@@ -289,11 +299,11 @@ canvas.addEventListener('touchstart', function(e) {
 
     if (mode === 'pencil') {
         down = true;
-        context.beginPath();
-        xPos = e.touches[0].clientX - canvas.offsetLeft;
-        yPos = e.touches[0].clientY - canvas.offsetTop;
-        context.moveTo(xPos, yPos);
-        canvas.addEventListener("touchmove", draw);
+        //context.beginPath();
+        startX = e.touches[0].clientX - canvas.offsetLeft;
+        startY = e.touches[0].clientY - canvas.offsetTop;
+        //context.moveTo(xPos, yPos);
+        //canvas.addEventListener("touchmove", draw);
     } else if (mode === 'eraser') {
         down = true;
         context.beginPath();
@@ -315,6 +325,7 @@ canvas.addEventListener('touchend', function(e) {
     touchend_circle(e);
     //Make color slider dissapear on not touching
     make_color_slider_dissapear();
+    mode = "pencil";
     down = false;
 });
 
@@ -332,11 +343,25 @@ function draw(e){
             context.stroke();
         }
     } else {
+        //Draw all previous strokes
+        if(strokes.length>0){
+            for(var i=0; i<strokes.length;i++){
+                var s = strokes[i];
+                context.moveTo(s.start_X,s.start_Y);
+                context.lineTo(s.end_X,s.end_Y);
+                context.stroke();
+            }
+        }
+        
         xPos = e.touches[0].clientX - canvas.offsetLeft;
         yPos = e.touches[0].clientY - canvas.offsetTop;
         if (down == true) {
+            context.moveTo(startX, startY);
             context.lineTo(xPos, yPos);
             context.stroke();
+            strokes.push({start_X:startX, start_Y: startY, end_X: xPos, end_Y: yPos});
+            startX = xPos;
+            startY = yPos;
         }
     }
 
