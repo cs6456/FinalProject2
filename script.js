@@ -462,6 +462,7 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 var old_x = r.x;
                 var old_y = r.y;
 
+                //Pinch out gesture (Increase size)
                 //Check for x
                 //If touch x coordinates are less than x position of rectangle then
                 if(mx < r.x){
@@ -497,6 +498,42 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 }
                 if(my1 > (r.y+r.height)){
                     r.height = r.height + dy_1;
+                }
+
+                //Pinch in gesture (Decrease size)
+                //Check for x
+                //If touch x coordinates is more than x position of rectangle then
+                if(mx > r.x){
+                    r.x = r.x + (mx-r.x);
+                    r.width = r.width - (mx - old_x);
+                }
+                if(mx1 > r.x){
+                    r.x = r.x + (mx1-r.x);
+                    r.width = r.width - (mx1 - old_x);
+                }
+                //If touch x coordinates is less than x position + width of rectangle
+                if(mx < (r.x + r.width)){
+                    r.width = r.width - dx;
+                }
+                if(mx1 < (r.x + r.width)){
+                    r.width = r.width - dx_1;
+                }
+                //Check for y
+                //If touch y coordinates is more than the y position of rectangle then
+                if(my > r.y){
+                    r.y = r.y + (my - r.y);
+                    r.height = r.height - (my - old_y);
+                }
+                if(my1 > r.y){
+                    r.y = r.y + (my1 - r.y);
+                    r.height = r.height - (my1 - old_y);
+                }
+                //If touch y coordinates is less than y position + height of rectangle
+                if(my < (r.y + r.height)){
+                    r.height = r.height - dy;
+                }
+                if(my1 < (r.y + r.height)){
+                    r.height = r.height - dy_1;
                 }
             }  
         }
