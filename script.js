@@ -379,7 +379,7 @@ function touchmove_circle(e){
         var mx_1 = 0;
         var my_1 = 0;
 
-        if(gesture_or_not_rectangle){
+        if(gesture_or_not_circle){
             mx_1 = parseInt(e.touches[1].clientX-offsetX);
             my_1 = parseInt(e.touches[1].clientY-offsetY);
             handle_resize_gesture_circle(mx,my,mx_1,my_1);
