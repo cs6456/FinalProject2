@@ -458,15 +458,19 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 var dx_1=mx1-startX1_rectangle;
                 var dy_1=my1-startY1_rectangle;
 
+                //Old coordinates of rectangle upper left corner
+                var old_x = r.x;
+                var old_y = r.y;
+
                 //Check for x
                 //If touch x coordinates are less than x position of rectangle then
                 if(mx < r.x){
                     r.x = r.x - (r.x-mx);
-                    r.width = r.width + (r.x-mx);
+                    r.width = r.width + (old_x-mx);
                 }
                 if(mx1 < r.x){
                     r.x = r.x - (r.x-mx1);
-                    r.width = r.width + (r.x-mx1);
+                    r.width = r.width + (old_x-mx1);
                 }
                 //If touch x coordinates is more than x position + width of rectangle
                 if(mx > (r.x + r.width)){
@@ -481,11 +485,11 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 //If touch y coordinates are less than the y position of rectangle then
                 if(my < r.y){
                     r.y = r.y - (r.y-my);
-                    r.height = r.height + (r.y-my);
+                    r.height = r.height + (old_y-my);
                 }
                 if(my1 < r.y){
                     r.y = r.y - (r.y-my1);
-                    r.height = r.height + (r.y-my1);
+                    r.height = r.height + (old_y-my1);
                 }
                 //If touch y coordinates is more than y position + height of rectangle
                 if(my > (r.y+r.height)){
