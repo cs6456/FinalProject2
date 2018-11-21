@@ -82,9 +82,9 @@ var startY_eraser;
 // var r_color_slider=makeRangeControl(50,500,200,25);
 // var g_color_slider=makeRangeControl(50,530,200,25);
 // var b_color_slider=makeRangeControl(50,560,200,25);
-var r_color_slider=makeRangeControl(50,200,200,25);
-var g_color_slider=makeRangeControl(50,230,200,25);
-var b_color_slider=makeRangeControl(50,260,200,25);
+var r_color_slider=makeRangeControl(50,300,200,25);
+var g_color_slider=makeRangeControl(50,330,200,25);
+var b_color_slider=makeRangeControl(50,360,200,25);
 var r_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var g_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var b_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
@@ -96,8 +96,6 @@ window.onload=function(){
 //Initiate function
 function init(){
     make_shape_toolbox();
-
-    //drawColorRangeControl(range);
 }
 
 //Function to generate shape toolbox
@@ -121,7 +119,6 @@ function rect(x,y,w,h,stroke,fill) {
     context.closePath();
     console.log(fill);
     if(!(fill === "No fill")){
-        //console.log("REACHED!");
         context.fill();
     } 
 }
@@ -181,7 +178,6 @@ function drawColorRangeControl(range){
 function clearColorRangeControl(range){
     context.clearRect(range.x-12.5,range.y-range.height/2-15,range.width+25,range.height+20);
 }
-
 
 //handle touch start events for color range slider
 function touchstart_colorSlider(e){
