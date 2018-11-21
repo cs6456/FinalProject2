@@ -511,30 +511,30 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                     r.x = r.x + (mx1-r.x);
                     r.width = r.width - (mx1 - old_x);
                 }
-                //If touch x coordinates is less than x position + width of rectangle
-                if(mx < (r.x + r.width)){
-                    r.width = r.width - dx;
-                }
-                if(mx1 < (r.x + r.width)){
-                    r.width = r.width - dx_1;
-                }
-                //Check for y
-                //If touch y coordinates is more than the y position of rectangle then
-                if(my > r.y){
-                    r.y = r.y + (my - r.y);
-                    r.height = r.height - (my - old_y);
-                }
-                if(my1 > r.y){
-                    r.y = r.y + (my1 - r.y);
-                    r.height = r.height - (my1 - old_y);
-                }
-                //If touch y coordinates is less than y position + height of rectangle
-                if(my < (r.y + r.height)){
-                    r.height = r.height - dy;
-                }
-                if(my1 < (r.y + r.height)){
-                    r.height = r.height - dy_1;
-                }
+                // //If touch x coordinates is less than x position + width of rectangle
+                // if(mx < (r.x + r.width)){
+                //     r.width = r.width - dx;
+                // }
+                // if(mx1 < (r.x + r.width)){
+                //     r.width = r.width - dx_1;
+                // }
+                // //Check for y
+                // //If touch y coordinates is more than the y position of rectangle then
+                // if(my > r.y){
+                //     r.y = r.y + (my - r.y);
+                //     r.height = r.height - (my - old_y);
+                // }
+                // if(my1 > r.y){
+                //     r.y = r.y + (my1 - r.y);
+                //     r.height = r.height - (my1 - old_y);
+                // }
+                // //If touch y coordinates is less than y position + height of rectangle
+                // if(my < (r.y + r.height)){
+                //     r.height = r.height - dy;
+                // }
+                // if(my1 < (r.y + r.height)){
+                //     r.height = r.height - dy_1;
+                // }
             }  
         }
     }
