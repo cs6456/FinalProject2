@@ -461,11 +461,11 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 //Check for x
                 //If touch x coordinates are less than x position of rectangle then
                 if(mx < r.x){
-                    r.x = r.x - dx;
+                    r.x = r.x + dx;
                     r.width = r.width + dx;
                 }
                 if(mx1 < r.x){
-                    r.x = r.x - dx_1;
+                    r.x = r.x + dx_1;
                     r.width = r.width + dx_1;
                 }
                 //If touch x coordinates is more than x position + width of rectangle
@@ -527,8 +527,8 @@ function touchmove_rectangle(e){
             var dy=my-startY_rectangle;
 
             // move each rect that isDragging 
-            // by the distance the mouse has moved
-            // since the last mousemove
+            // by the distance the touch has moved
+            // since the last touchmove
             for(var i=0;i<rects.length;i++){
                 var r=rects[i];
                 if(r.isDragging){
@@ -547,7 +547,7 @@ function touchmove_rectangle(e){
                 }
             }
 
-            // reset the starting mouse position for the next mousemove
+            // reset the starting touch position for the next touchmove
             startX_rectangle=mx;
             startY_rectangle=my;
         }
