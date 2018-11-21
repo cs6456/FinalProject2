@@ -378,6 +378,7 @@ function handle_resize_gesture_circle(mx,my,mx1,my1){
                 var areaY = my - c.y;
                 var areaY1 = my1 - c.y;
                 if(areaX * areaX + areaY * areaY > c.r * c.r){
+                    window.print();
                     c.r += dx;
                 }
                 if(areaX1 * areaX1 + areaY1 * areaY1 > c.r * c.r){
