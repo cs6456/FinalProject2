@@ -16,12 +16,6 @@ var colorslider = document.getElementById('colorRange');
 
 var timer = null; // timer for tap and hold function
 
-// an array of objects that define different strokes
-var strokes = [];
-
-// an array of objects that define different eraser strokes
-var eraser_strokes = [];
-
 //Variable flag to indicate if dragging or not
 var isDragging = false;
 
@@ -70,13 +64,26 @@ var down = false;
 var mode = 'pencil';
 var background = 'white';
 
+// an array of objects that define different strokes
+var strokes = [];
 //Variables for strokes
 var startX;
 var startY;
 
+// an array of objects that define different eraser strokes
+var eraser_strokes = [];
 //Variables for eraser strokes
 var startX_eraser;
 var startY_eraser;
+
+//Variables for color slider
+//Put information for r, g, and b color sliders
+var r_color_slider=makeRangeControl(50,500,200,25);
+var g_color_slider=makeRangeControl(50,530,200,25);
+var b_color_slider=makeRangeControl(50,560,200,25);
+var r_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
+var g_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
+var b_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 
 window.onload=function(){
     init();
@@ -94,8 +101,7 @@ function init(){
         circle(c.x,c.y,c.r,c.fill,c.stroke);
     }
 
-    var range=makeRangeControl(300,100,200,25);
-    drawRangeControl(range);
+    //drawColorRangeControl(range);
 }
 
 //Make rectangle shape function
@@ -135,12 +141,12 @@ function makeRangeControl(x,y,width,height){
     var range={x:x,y:y,width:width,height:height};
     range.x1=range.x+range.width;
     range.y1=range.y;
-    range.pct=0.50;
+    range.pct=0;
     return(range);
 }
 
-//Draw range slider
-function drawRangeControl(range){
+//Draw color range slider
+function drawColorRangeControl(range){
     // clear the range control area
     // bar
     context.lineWidth=6;
@@ -165,14 +171,77 @@ function drawRangeControl(range){
     context.fillText(parseInt(range.pct*100)+'%',range.x+range.width/2,range.y-range.height/2-2);
 }
 
-//make range color appear
-function make_color_slider_appear(){
-    colorslider.style.visibility = "visible";
+//Clear color slider function
+function clearColorRangeControl(range){
+    context.clearRect(range.x-12.5,range.y-range.height/2-15,range.width+25,range.height+20);
 }
 
-//make range color dissapear
+
+//handle touch start events for color range slider
+function touchstart_colorSlider(e){
+    var mx=0;
+    var my=0;
+    if(e.touches.length == 2){
+        mx=parseInt(e.touches[1].clientX-offsetX);
+        my=parseInt(e.touches[1].clientY-offsetY);
+    }
+    // test for possible start of dragging
+    if(mx>r_color_slider.x && mx<r_color_slider.x+r_color_slider.width && my>r_color_slider.y-r_color_slider.height/2 && my<r_color_slider.y+r_color_slider.height/2){
+        r_isDown = true;
+        mode = 'red color slider';
+    } 
+    else if (mx>g_color_slider.x && mx<g_color_slider.x+g_color_slider.width && my>g_color_slider.y-g_color_slider.height/2 && my<g_color_slider.y+g_color_slider.height/2){
+        g_isDown = true;
+        mode = 'green color slider';
+    }
+    else if (mx>b_color_slider.x && mx<b_color_slider.x+b_color_slider.width && my>b_color_slider.y-b_color_slider.height/2 && my<b_color_slider.y+b_color_slider.height/2){
+        b_isDown = true;
+        mode = 'blue color slider';
+    }
+}
+
+//handle touch move events for color range slider
+function touchmove_colorSlider(e){
+    if(r_isDown || g_isDown || b_isDown){
+        touchX=parseInt(e.touches[1].clientX-offsetX);
+        touchY=parseInt(e.touches[1].clientY-offsetY);
+        // set new thumb & redraw
+        if(r_isDown){
+            r_color_slider.pct=Math.max(0,Math.min(1,(touchX-r_color_slider.x)/r_color_slider.width));
+            context.clearRect(r_color_slider.x-12.5,r_color_slider.y-r_color_slider.height/2-15,r_color_slider.width+25,r_color_slider.height+20);
+            drawColorRangeControl(r_color_slider);
+        } else if (g_isDown){
+            g_color_slider.pct=Math.max(0,Math.min(1,(touchX-g_color_slider.x)/g_color_slider.width));
+            context.clearRect(g_color_slider.x-12.5,g_color_slider.y-g_color_slider.height/2-15,g_color_slider.width+25,g_color_slider.height+20);
+            drawColorRangeControl(g_color_slider);
+        } else if (b_isDown){
+            b_color_slider.pct=Math.max(0,Math.min(1,(touchX-b_color_slider.x)/b_color_slider.width));
+            context.clearRect(b_color_slider.x-12.5,b_color_slider.y-b_color_slider.height/2-15,b_color_slider.width+25,b_color_slider.height+20);
+            drawColorRangeControl(b_color_slider);
+        }
+        
+    }
+}
+
+//handle touch end events for color range slider
+function touchend_colorSlider(e){
+    r_isDown = false;
+    g_isDown = false;
+    b_isDown = false;
+}
+
+//make range color sliders appear
+function make_color_slider_appear(){
+    drawColorRangeControl(r_color_slider);
+    drawColorRangeControl(g_color_slider);
+    drawColorRangeControl(b_color_slider);
+}
+
+//make range color sliders dissapear
 function make_color_slider_dissapear(){
-    colorslider.style.visibility = "hidden";
+    clearColorRangeControl(r_color_slider);
+    clearColorRangeControl(g_color_slider);
+    clearColorRangeControl(b_color_slider);
 }
 
 //handle touch start events for circles
@@ -645,6 +714,9 @@ canvas.addEventListener('touchstart', function(e) {
     //Perform touchstart events for circle
     touchstart_circle(e);
 
+    //Perform touchstart events for color slider
+    touchstart_colorSlider(e);
+
     if (mode === 'pencil') {
 
         //Remove all selections for rectangles
@@ -698,6 +770,8 @@ canvas.addEventListener('touchend', function(e) {
     touchend_rectangle(e);
     //Perform touchend events for circle
     touchend_circle(e);
+    //Perform touchend events for color slider
+    touchend_colorSlider(e);
     //Make color slider dissapear on not touching
     make_color_slider_dissapear();
     mode = "pencil";
@@ -766,6 +840,7 @@ function draw(e){
         var c=circles[i];
         circle(c.x,c.y,c.r,c.fill,c.stroke);
     }
+    touchmove_colorSlider(e);
     //to here if pencil does not work
 }
 
