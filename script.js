@@ -380,7 +380,7 @@ function handle_resize_gesture_circle(mx,my,mx1,my1){
                 if(areaX * areaX + areaY * areaY > c.r * c.r){
                     c.r += dx;
                 }
-                if(areaX1 * areaX1 + areaY1 * areaY1 > c.r * c.r){
+                else if(areaX1 * areaX1 + areaY1 * areaY1 > c.r * c.r){
                     c.r += dx_1;
                 }
             }
