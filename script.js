@@ -189,6 +189,7 @@ function touchstart_circle(e){
             var areaX = mx_1 - c.x;
             var areaY = my_1 - c.y;
             if(areaX * areaX + areaY * areaY <= c.r * c.r){
+                window.print("2 touches detected in circle!");
                 gesture_or_not_circle = true;
             }
         }
