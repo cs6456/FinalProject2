@@ -362,6 +362,7 @@ function handle_resize_gesture_circle(mx,my,mx1,my1){
         if(c.isDragging){
             if(c.id != 1){
                 if(c.x + r < mx || c.x + r < mx1){
+                    window.print("2 touches detected in circle!");
                     c.r += (mx - (c.x+r));
                 }
             }
@@ -380,7 +381,7 @@ function touchmove_circle(e){
         var my_1 = 0;
 
         if(gesture_or_not_circle){
-            window.print("2 touches detected in circle!");
+            //window.print("2 touches detected in circle!");
             mx_1 = parseInt(e.touches[1].clientX-offsetX);
             my_1 = parseInt(e.touches[1].clientY-offsetY);
             handle_resize_gesture_circle(mx,my,mx_1,my_1);
