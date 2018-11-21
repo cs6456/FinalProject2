@@ -61,6 +61,10 @@ var dragok_circle = false;
 var startX_circle;
 var startY_circle;
 
+//Used for resizing gesture for circle
+var startX1_circle;
+var startY1_circle;
+
 context.lineWidth = 5;
 var down = false;
 var mode = 'pencil';
@@ -190,6 +194,8 @@ function touchstart_circle(e){
             var areaY = my_1 - c.y;
             if(areaX * areaX + areaY * areaY <= c.r * c.r){
                 gesture_or_not_circle = true;
+                startX1_circle = mx_1;
+                startY1_circle = my_1;
             }
         }
     }
@@ -359,12 +365,15 @@ function touchend_rectangle(e){
 function handle_resize_gesture_circle(mx,my,mx1,my1){
     for(var i=0;i<circles.length;i++){
         var c = circles[i];
+
+        var dx=mx-startX_circle;
+        var dy=my-startY_circle;
+        var dx_1=mx1-startX1_circle;
+        var dy_1=my1-startY1_circle;
+
         if(c.isDragging){
             if(c.id != 1){
-                if(c.x + r < mx || c.x + r < mx1){
-                    //window.print("2 touches detected in circle!");
-                    c.r += (mx - (c.x+r));
-                }
+                
             }
         }
     }
@@ -384,7 +393,11 @@ function touchmove_circle(e){
             //window.print("2 touches detected in circle!");
             mx_1 = parseInt(e.touches[1].clientX-offsetX);
             my_1 = parseInt(e.touches[1].clientY-offsetY);
-            //handle_resize_gesture_circle(mx,my,mx_1,my_1);
+            handle_resize_gesture_circle(mx,my,mx_1,my_1);
+            startX_circle=mx;
+            startY_circle=my;
+            startX1_circle=mx_1;
+            startY1_circle=my_1;
         } else {
             // calculate the distance the touch has moved
             // since the last touchmove
