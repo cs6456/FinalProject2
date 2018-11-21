@@ -83,8 +83,8 @@ var startY_eraser;
 // var g_color_slider=makeRangeControl(50,530,200,25);
 // var b_color_slider=makeRangeControl(50,560,200,25);
 var r_color_slider=makeRangeControl(50,300,200,25);
-var g_color_slider=makeRangeControl(50,330,200,25);
-var b_color_slider=makeRangeControl(50,360,200,25);
+var g_color_slider=makeRangeControl(50,350,200,25);
+var b_color_slider=makeRangeControl(50,400,200,25);
 var r_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var g_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var b_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
@@ -212,13 +212,19 @@ function touchmove_colorSlider(e){
             r_color_slider.pct=Math.max(0,Math.min(1,(touchX-r_color_slider.x)/r_color_slider.width));
             context.clearRect(r_color_slider.x-12.5,r_color_slider.y-r_color_slider.height/2-15,r_color_slider.width+25,r_color_slider.height+20);
             drawColorRangeControl(r_color_slider);
+            drawColorRangeControl(g_color_slider);
+            drawColorRangeControl(b_color_slider);
         } else if (g_isDown){
             g_color_slider.pct=Math.max(0,Math.min(1,(touchX-g_color_slider.x)/g_color_slider.width));
             context.clearRect(g_color_slider.x-12.5,g_color_slider.y-g_color_slider.height/2-15,g_color_slider.width+25,g_color_slider.height+20);
+            drawColorRangeControl(r_color_slider);
             drawColorRangeControl(g_color_slider);
+            drawColorRangeControl(b_color_slider);
         } else if (b_isDown){
             b_color_slider.pct=Math.max(0,Math.min(1,(touchX-b_color_slider.x)/b_color_slider.width));
             context.clearRect(b_color_slider.x-12.5,b_color_slider.y-b_color_slider.height/2-15,b_color_slider.width+25,b_color_slider.height+20);
+            drawColorRangeControl(r_color_slider);
+            drawColorRangeControl(g_color_slider);
             drawColorRangeControl(b_color_slider);
         }
         
