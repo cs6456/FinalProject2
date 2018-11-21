@@ -457,20 +457,43 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 var dy=my-startY_rectangle;
                 var dx_1=mx1-startX1_rectangle;
                 var dy_1=my1-startY1_rectangle;
-                //window.alert("REACHED1!");
-                //Upperleft corner
-                if(mx < r.x || mx1 < r.x){
 
+                //Check for x
+                //If touch x coordinates are less than x position of rectangle then
+                if(mx < r.x){
+                    r.x = r.x - dx;
+                    r.width = r.width + dx;
                 }
-                //Upperright corner
-                if(mx > r.x + r.width || mx1 > r.x + r.width){
+                if(mx1 < r.x){
+                    r.x = r.x - dx_1;
+                    r.width = r.width + dx_1;
+                }
+                //If touch x coordinates is more than x position + width of rectangle
+                if(mx > (r.x + r.width)){
+                    r.width = r.width + dx;
+                }
 
+                if(mx1 > (r.x + r.width)){
+                    r.width = r.width + dx_1;
                 }
-                //Lowerleft corner
-                if(mx){
 
+                //Check for y
+                //If touch y coordinates are less than the y position of rectangle then
+                if(my < r.y){
+                    r.y = r.y - dy;
+                    r.height = r.height + dy;
                 }
-                //Lowerright corner
+                if(my1 < r.y){
+                    r.y = r.y - dy_1;
+                    r.height = r.height + dy_1;
+                }
+                //If touch y coordinates is more than y position + height of rectangle
+                if(my > (r.y+r.height)){
+                    r.height = r.height + dy;
+                }
+                if(my1 > (r.y+r.height)){
+                    r.height = r.height + dy_1;
+                }
             }  
         }
     }
