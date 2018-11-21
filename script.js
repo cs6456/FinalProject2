@@ -373,7 +373,16 @@ function handle_resize_gesture_circle(mx,my,mx1,my1){
 
         if(c.isDragging){
             if(c.id != 1){
-                
+                var areaX = mx - c.x;
+                var areaX1 = mx1 - c.x;
+                var areaY = my - c.y;
+                var areaY1 = my1 - c.y;
+                if(areaX * areaX + areaY * areaY > c.r * c.r){
+                    c.r += dx;
+                }
+                if(areaX1 * areaX1 + areaY1 * areaY1 > c.r * c.r){
+                    c.r += dx_1;
+                }
             }
         }
     }
