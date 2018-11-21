@@ -457,7 +457,7 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 var dy=my-startY_rectangle;
                 var dx_1=mx1-startX1_rectangle;
                 var dy_1=my1-startY1_rectangle;
-                window.alert("REACHED1!");
+                //window.alert("REACHED1!");
                 //Upperleft corner
                 if(mx < r.x || mx1 < r.x){
 
