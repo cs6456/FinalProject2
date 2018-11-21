@@ -82,9 +82,9 @@ var startY_eraser;
 // var r_color_slider=makeRangeControl(50,500,200,25);
 // var g_color_slider=makeRangeControl(50,530,200,25);
 // var b_color_slider=makeRangeControl(50,560,200,25);
-var r_color_slider=makeRangeControl(50,300,200,25);
-var g_color_slider=makeRangeControl(50,350,200,25);
-var b_color_slider=makeRangeControl(50,400,200,25);
+var r_color_slider=makeRangeControl(50,300,200,25, "red");
+var g_color_slider=makeRangeControl(50,350,200,25, "green");
+var b_color_slider=makeRangeControl(50,400,200,25, "blue");
 var r_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var g_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var b_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
@@ -140,8 +140,8 @@ function circle(x,y,r,fill,stroke){
 }
 
 //Make range slider function
-function makeRangeControl(x,y,width,height){
-    var range={x:x,y:y,width:width,height:height};
+function makeRangeControl(x,y,width,height,fill){
+    var range={x:x,y:y,width:width,height:height, fill:fill};
     range.x1=range.x+range.width;
     range.y1=range.y;
     range.pct=0;
@@ -157,7 +157,7 @@ function drawColorRangeControl(range){
     context.beginPath();
     context.moveTo(range.x,range.y);
     context.lineTo(range.x1,range.y);
-    context.strokeStyle='black';
+    context.strokeStyle=range.fill;
     context.stroke();
     // thumb
     context.beginPath();
@@ -167,11 +167,11 @@ function drawColorRangeControl(range){
     context.strokeStyle='rgba(255,0,0,0.25)';
     context.stroke();
     // legend
-    context.fillStyle='blue';
+    context.fillStyle='black';
     context.textAlign='center';
     context.textBaseline='top';
     context.font='10px arial';
-    context.fillText(parseInt(range.pct*100)+'%',range.x+range.width/2,range.y-range.height/2-2);
+    context.fillText(parseInt(range.pct*255),range.x+range.width/2,range.y-range.height/2-2);
 }
 
 //Clear color slider function
