@@ -804,7 +804,9 @@ canvas.addEventListener('touchend', function(e) {
     //Perform touchend events for color slider
     touchend_colorSlider(e);
     //Make color slider dissapear on not touching
-    make_color_slider_dissapear();
+    if(e.touches.length == 0){
+         make_color_slider_dissapear();
+    }
     mode = "pencil";
     down = false;
     clearTimeout(timer);
