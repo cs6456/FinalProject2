@@ -79,9 +79,12 @@ var startY_eraser;
 
 //Variables for color slider
 //Put information for r, g, and b color sliders
-var r_color_slider=makeRangeControl(50,500,200,25);
-var g_color_slider=makeRangeControl(50,530,200,25);
-var b_color_slider=makeRangeControl(50,560,200,25);
+// var r_color_slider=makeRangeControl(50,500,200,25);
+// var g_color_slider=makeRangeControl(50,530,200,25);
+// var b_color_slider=makeRangeControl(50,560,200,25);
+var r_color_slider=makeRangeControl(50,200,200,25);
+var g_color_slider=makeRangeControl(50,230,200,25);
+var b_color_slider=makeRangeControl(50,260,200,25);
 var r_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var g_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var b_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
