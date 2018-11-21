@@ -27,7 +27,8 @@ var isSelecting_circle = false;
 var rects=[];
 var new_rectangle_made = false; //Flag to tell if a new rectangle is made or not
 var rect_count = 1; // Count number of rectangles -> is the id of each rectangle
-rects.push({id:1,x:75-15,y:50-15,width:150,height:100,fill:"No fill",stroke: "black",isDragging:false,isSelected: false});
+rects.push({id:0,x:35,y:20,width:150,height:175,fill:"No fill",stroke:"black",isDragging:false,isSelected:false});
+rects.push({id:1,x:75-15,y:50-15,width:100,height:55,fill:"No fill",stroke: "black",isDragging:false,isSelected: false});
 //var selected_rects = []; //An array of selected rectangles
 var gesture_or_not_rectangle = false; //Flag to tell if gesture going to start or not
 
@@ -45,7 +46,7 @@ var startY1_rectangle;
 var circles = [];
 var new_circle_made = false; //Flag to tell if a new circle is made or not
 var circle_count = 1;  // Count number of circles -> is the id of each rectangle
-circles.push({id:1, x:130, y:220, r:60, fill: "No fill",stroke: "black", isDragging: false, isSelected: false});
+circles.push({id:1, x:110, y:145, r:40, fill: "No fill",stroke: "black", isDragging: false, isSelected: false});
 //var selected_circles = []; //An array of selected circles
 var gesture_or_not_circle = false; //Flag to tell if gesture going to start or not
 
@@ -91,17 +92,19 @@ window.onload=function(){
 
 //Initiate function
 function init(){
-    for(var i=0;i<rects.length;i++){
-        var r=rects[i];
-        rect(r.x,r.y,r.width,r.height, r.stroke,r.fill);
-    }
-
-    for(var i=0; i<circles.length;i++){
-        var c=circles[i];
-        circle(c.x,c.y,c.r,c.fill,c.stroke);
-    }
+    make_shape_toolbox();
 
     //drawColorRangeControl(range);
+}
+
+//Function to generate shape toolbox
+function make_shape_toolbox(){
+    var r = rects[0];
+    rect(r.x,r.y,r.width,r.height, r.stroke,"white");
+    r = rects[1];
+    rect(r.x,r.y,r.width,r.height, r.stroke,r.fill);
+    var c = circles[0];
+    circle(c.x,c.y,c.r,c.fill,c.stroke);
 }
 
 //Make rectangle shape function
@@ -244,6 +247,23 @@ function make_color_slider_dissapear(){
     clearColorRangeControl(b_color_slider);
 }
 
+//Redraw all old stuff function
+function redraw(){
+    //Redraw rectangles
+    for(var i=0;i<rects.length;i++){
+        var r=rects[i];
+        context.fillStyle=r.fill;
+        rect(r.x,r.y,r.width,r.height, r.stroke, r.fill);
+    }
+    //Redraw circles
+    for(var i=0; i<circles.length;i++){
+        var c=circles[i];
+        circle(c.x,c.y,c.r,c.fill,c.stroke);
+    }
+    //Remake shape toolbox
+    make_shape_toolbox();
+}
+
 //handle touch start events for circles
 function touchstart_circle(e){
     var first = false;//flag variable to check if 1st touch is inside of circle or not
@@ -291,7 +311,7 @@ function touchstart_circle(e){
             }
 
             if(c.id>1){
-                timer = setTimeout( make_color_slider_appear, 2000 );
+                timer = setTimeout(make_color_slider_appear, 2000 );
             }
         }
 
@@ -353,7 +373,7 @@ function touchstart_rectangle(e){
             }
 
             //shape at toolbar cannot be selected
-            if(r.id == 1){
+            if(r.id == 1 || r.id == 0){
                 r.isSelected = false;
             }
             
@@ -399,10 +419,7 @@ function touchend_circle(e){
         }
 
         if(isSelecting_circle){
-            for(var i=0;i<circles.length;i++){
-                var c=circles[i];
-                circle(c.x,c.y,c.r,c.fill,c.stroke);
-            }
+            redraw();
         }
     }
 
@@ -444,10 +461,7 @@ function touchend_rectangle(e){
         }
 
         if(isSelecting_rectangle){
-            for(var i=0;i<rects.length;i++){
-                var r=rects[i];
-                rect(r.x,r.y,r.width,r.height, r.stroke, r.fill); 
-            }
+            redraw();
         }
     }
 
@@ -536,7 +550,7 @@ function touchmove_circle(e){
                     if(c.id == 1){
                         if(!new_circle_made){
                             circle_count++;
-                            circles.push({id:circle_count, x:130, y:220, r:60, fill: "No fill",stroke: "black", isDragging: true, isSelected: false});
+                            circles.push({id:circle_count, x:c.x, y:c.y, r:40, fill: "No fill",stroke: "black", isDragging: true, isSelected: false});
                             new_circle_made = true;
                         }
                     } else {
@@ -684,10 +698,22 @@ function touchmove_rectangle(e){
                     if(r.id == 1){
                         if(!new_rectangle_made){
                             rect_count++;
-                            rects.push({id:rect_count,x:75-15,y:50-15,width:150,height:100,fill:"No fill",stroke:"black", isDragging:true, isSelected: false}); 
+                            rects.push({id:rect_count,x:r.x,y:r.y,width:100,height:55,fill:"No fill",stroke:"black", isDragging:true, isSelected: false}); 
                             new_rectangle_made = true;
                         }
-                    } else {
+                    } 
+                    else if(r.id == 0){
+                        if(!new_rectangle_made && !new_circle_made){
+                            r.x+=dx;
+                            r.y+=dy;
+                            r = rects[1];
+                            r.x+=dx;
+                            r.y+=dy;
+                            var c = circles[0];
+                            c.x+=dx;
+                            c.y+=dy;
+                        }
+                    }else {
                         console.log('id: ' + r.id);
                         r.x+=dx;
                         r.y+=dy;
@@ -776,6 +802,7 @@ canvas.addEventListener('touchend', function(e) {
     make_color_slider_dissapear();
     mode = "pencil";
     down = false;
+    clearTimeout(timer);
 });
 
 function draw(e){
@@ -828,20 +855,10 @@ function draw(e){
         }
     }
 
-    //Comment out starting from here
     touchmove_rectangle(e);
-    for(var i=0;i<rects.length;i++){
-        var r=rects[i];
-        context.fillStyle=r.fill;
-        rect(r.x,r.y,r.width,r.height, r.stroke, r.fill);
-    }
     touchmove_circle(e);
-    for(var i=0; i<circles.length;i++){
-        var c=circles[i];
-        circle(c.x,c.y,c.r,c.fill,c.stroke);
-    }
     touchmove_colorSlider(e);
-    //to here if pencil does not work
+    redraw();
 }
 
 function changeColor(color){
@@ -853,18 +870,18 @@ function changeColor(color){
             var r = rects[i];
             if(r.isSelected){
                 r.fill = color;
-                rect(r.x,r.y,r.width,r.height, r.stroke, r.fill);
             }
         }
+        redraw();
     }
     if(isSelecting_circle){
         for(var i = 0; i < circles.length;i++){
             var c = circles[i];
             if(c.isSelected){
                 c.fill = color;
-                circle(c.x,c.y,c.r,c.fill,c.stroke);
             }
         }
+        redraw();
     }
     //context.fillStyle = color;
 }
