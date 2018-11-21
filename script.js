@@ -362,7 +362,7 @@ function handle_resize_gesture_circle(mx,my,mx1,my1){
         if(c.isDragging){
             if(c.id != 1){
                 if(c.x + r < mx || c.x + r < mx1){
-                    window.print("2 touches detected in circle!");
+                    //window.print("2 touches detected in circle!");
                     c.r += (mx - (c.x+r));
                 }
             }
