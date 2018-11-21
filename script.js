@@ -384,7 +384,7 @@ function touchmove_circle(e){
             //window.print("2 touches detected in circle!");
             mx_1 = parseInt(e.touches[1].clientX-offsetX);
             my_1 = parseInt(e.touches[1].clientY-offsetY);
-            handle_resize_gesture_circle(mx,my,mx_1,my_1);
+            //handle_resize_gesture_circle(mx,my,mx_1,my_1);
         } else {
             // calculate the distance the touch has moved
             // since the last touchmove
