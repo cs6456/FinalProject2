@@ -449,31 +449,31 @@ function touchmove_circle(e){
 
 //handle gestures of rectangle resizing
 function handle_resize_gesture_rectangle(mx, my, mx1, my1){
-    // for(var i=0;i<rects.length;i++){
-    //     var r = rects[i];
-    //     if(r.isDragging){
-    //         if(r.id != 1){
-    //             var dx=mx-startX_rectangle;
-    //             var dy=my-startY_rectangle;
-    //             var dx_1=mx1-startX1_rectangle;
-    //             var dy_1=my1-startY1_rectangle;
+    for(var i=0;i<rects.length;i++){
+        var r = rects[i];
+        if(r.isDragging){
+            if(r.id != 1){
+                var dx=mx-startX_rectangle;
+                var dy=my-startY_rectangle;
+                var dx_1=mx1-startX1_rectangle;
+                var dy_1=my1-startY1_rectangle;
+                window.print("REACHED1!");
+                //Upperleft corner
+                if(mx < r.x || mx1 < r.x){
 
-    //             //Upperleft corner
-    //             if(mx < r.x || mx1 < r.x){
+                }
+                //Upperright corner
+                if(mx > r.x + r.width || mx1 > r.x + r.width){
 
-    //             }
-    //             //Upperright corner
-    //             if(mx > r.x + r.width || mx1 > r.x + r.width){
+                }
+                //Lowerleft corner
+                if(mx){
 
-    //             }
-    //             //Lowerleft corner
-    //             if(mx){
-
-    //             }
-    //             //Lowerright corner
-    //         }  
-    //     }
-    // }
+                }
+                //Lowerright corner
+            }  
+        }
+    }
 }
 
 //handle touchmove events for rectangle
@@ -492,6 +492,11 @@ function touchmove_rectangle(e){
             mx_1 = parseInt(e.touches[1].clientX-offsetX);
             my_1 = parseInt(e.touches[1].clientY-offsetY);
             handle_resize_gesture_rectangle(mx,my,mx_1,my_1);
+            // reset the starting mouse position for the next mousemove
+            startX_rectangle=mx;
+            startY_rectangle=my;
+            startX1_rectangle=mx_1;
+            startY1_rectangle=my_1;
         } else {
             // calculate the distance the touch has moved
             // since the last touchmove
