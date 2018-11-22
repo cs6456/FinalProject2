@@ -48,19 +48,20 @@ button {
     height: 50px;
 }
 #otherTools button {
-    width: 33%;
+    width: 25%;
     height: 50px;
     margin-top: 5px;
     background: #303030;
     color: white;
     cursor: pointer; /* a hand will appear when hover the mouse to the button*/
-    float: center;
+    float: left;
 }
 #otherTools button:hover {opacity: 0.5;}
 
 #clearCanvas {font: 25px Impact;}
 #fillCanvas {font: 25px Impact;}
 #cropCanvas {font: 25px Impact;}
+#eraserButton {font: 25px Impact;}
 
 
 

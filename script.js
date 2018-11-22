@@ -97,6 +97,9 @@ var c_circle_shape = null; //variable to keep track of selected circle for color
 var p_slider = makeRangeControl(50,450,200,25, "black");
 var p_isDown = false; //Flag variable to check if it is possible to move slider in range slider for pencil width slider
 
+//Variable to keep track of mode
+var curMode = 'pencil'; //Initial is pencil
+
 window.onload=function(){
     init();
 };
@@ -408,6 +411,20 @@ function redraw(){
         var c=circles[i];
         circle(c.x,c.y,c.r,c.fill,c.stroke, c.rc, c.g, c.b);
     }
+
+    //Redraw eraser strokes made
+    for(var i=0; i<eraser_strokes.length;i++){
+        var s = eraser_strokes[i];
+        context.strokeStyle = background;
+        context.fillStyle = background;
+        context.beginPath();
+        context.moveTo(s.start_X,s.start_Y);
+        context.lineTo(s.end_X,s.end_Y);
+        context.strokeStyle = s.strokecolor;
+        context.lineWidth = 5;
+        context.stroke();
+    }
+
     //Remake shape toolbox
     make_shape_toolbox();
 }
@@ -481,7 +498,7 @@ function touchstart_circle(e){
 
     if(first == false){
         if(!(mode==='rectangle')){
-            mode = 'pencil';
+            mode = curMode;
         }
     }
 
@@ -554,7 +571,7 @@ function touchstart_rectangle(e){
 
     if(first == false){
         console.log("REACHED!");
-        mode = 'pencil';
+        mode = curMode;
     }
 
     // save the current touch position
@@ -909,8 +926,7 @@ canvas.addEventListener('touchstart', function(e) {
     //Perform touchstart events for pencilSlider
     touchstart_pencilSlider(e);
 
-    if (mode === 'pencil') {
-
+    if (mode === 'pencil' || mode === 'eraser'){
         //Remove all selections for rectangles
         if(isSelecting_rectangle == true){
             isSelecting_rectangle = false;
@@ -936,7 +952,9 @@ canvas.addEventListener('touchstart', function(e) {
                 }
             }
         }
+    }
 
+    if (mode === 'pencil') {
         timer = setTimeout(function(){
                     drawPencilRangeControl(p_slider, pencil_width);
                 }, 2000 );
@@ -944,14 +962,10 @@ canvas.addEventListener('touchstart', function(e) {
         down = true;
         startX = e.touches[0].clientX - canvas.offsetLeft;
         startY = e.touches[0].clientY - canvas.offsetTop;
-        
     } else if (mode === 'eraser') {
         down = true;
-        //context.beginPath();
         startX_eraser = e.touches[0].clientX - canvas.offsetLeft;
         startY_eraser = e.touches[0].clientY - canvas.offsetTop;
-        //context.moveTo(xPos, yPos);
-        //canvas.addEventListener("touchmove", draw);
     }
 });
 
@@ -986,26 +1000,13 @@ function draw(e){
     }
     console.log('mode: ' + mode)
     if (mode === 'eraser') {
-        // context.strokeStyle = background;
-        // context.fillStyle = background;
-        // if(eraser_strokes.length   >0){
-        //     for(var i=0; i<eraser_strokes.length;i++){
-        //         var s = eraser_strokes[i];
-        //         context.moveTo(s.start_X,s.start_Y);
-        //         context.lineTo(s.end_X,s.end_Y);
-        //         context.stroke();
-        //     }
-        // }
-        // xPos = e.touches[0].clientX - canvas.offsetLeft;
-        // yPos = e.touches[0].clientY - canvas.offsetTop;
-        // if (down == true) {
-        //     context.moveTo(startX_eraser, startY_eraser);
-        //     context.lineTo(xPos, yPos);
-        //     context.stroke();
-        //     eraser_strokes.push({start_X:startX_eraser, start_Y: startY_eraser, end_X: xPos, end_Y: yPos});
-        //     startX_eraser = xPos;
-        //     startY_eraser = yPos;
-        // }
+        xPos = e.touches[0].clientX - canvas.offsetLeft;
+        yPos = e.touches[0].clientY - canvas.offsetTop;
+        if (down == true) {
+            eraser_strokes.push({start_X:startX_eraser, start_Y: startY_eraser, end_X: xPos, end_Y: yPos});
+            startX_eraser = xPos;
+            startY_eraser = yPos;
+        }
     } else if (mode === 'pencil'){
         var xPos = e.touches[0].clientX - canvas.offsetLeft;
         var yPos = e.touches[0].clientY - canvas.offsetTop;
@@ -1020,6 +1021,7 @@ function draw(e){
     touchmove_circle(e);
     touchmove_colorSlider(e);
     touchmove_pencilSlider(e);
+    clearTimeout(timer);
     redraw();
 }
 
@@ -1145,7 +1147,15 @@ function fillCanvas() {
 //         sidebar.style.left = '0px';
 //     }
 // }
+function eraserModeStart(){
+    curMode = 'eraser';
+    console.log('Mode change to eraser');
+}
 
+function pencilModeStart(){
+    curMode = 'pencil';
+    console.log('Mode change to pencil');
+}
 function changeMode(curMode) {
  mode = curMode;
 }
