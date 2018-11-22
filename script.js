@@ -270,7 +270,7 @@ function touchmove_colorSlider(e){
             drawColorRangeControl(g_color_slider, new_g);
             drawColorRangeControl(b_color_slider, new_b);
         }
-        redraw();
+        update_color_value(new_r,new_g,new_b);
     }
 }
 
@@ -363,6 +363,7 @@ function touchstart_circle(e){
             if(c.id>1 && !(c.fill === 'No fill')){
                 timer = setTimeout(function(){
                     c_circle_shape = c;
+                    c.isSelected = false;
                     make_color_slider_appear(c.rc,c.g,c.b);
                 }, 2000 );
             }
@@ -430,10 +431,10 @@ function touchstart_rectangle(e){
                 r.isSelected = false;
             }
             
-            //selected_rects.push(r);
             if(r.id>1 && !(r.fill === 'No fill')){
                 timer = setTimeout(function(){
                     c_rect_shape = r;
+                    r.isSelected = false;
                     make_color_slider_appear(r.r_value,r.g,r.b);
                 }, 2000 );
             }
