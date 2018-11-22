@@ -88,6 +88,8 @@ var b_color_slider=makeRangeControl(50,400,200,25, "blue");
 var r_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var g_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var b_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
+var c_rect_shape = null; //variable to keep track of selected rectangle for color change with slider
+var c_circle_shape = null; //variable to keep track of selected circle for color change with slider
 
 window.onload=function(){
     init();
@@ -102,6 +104,7 @@ function init(){
 function make_shape_toolbox(){
     var r = rects[0];
     rect(r.x,r.y,r.width,r.height, r.stroke,"white",r.r_value,r.g,r.b);
+    //rect(r.x,r.y,r.width,r.height, r.stroke,"Change in rgb value",255,r.g,r.b);
     r = rects[1];
     rect(r.x,r.y,r.width,r.height, r.stroke,r.fill, r.r_value,r.g,r.b);
     var c = circles[0];
@@ -118,7 +121,12 @@ function rect(x,y,w,h,stroke,fill,r,g,b) {
     context.stroke();
     context.closePath();
     if(!(fill === "No fill")){
-        context.fill();
+        if(fill === "Change in rgb value"){
+            context.fillStyle = 'rgb(' + r +',' + g + ',' + b + ')';
+            context.fill();
+        } else {
+            context.fill();
+        }
     } 
 }
 
@@ -131,7 +139,12 @@ function circle(x,y,r,fill,stroke,rc,g,b){
     context.fillStyle = fill;
     context.lineWidth = 3;
     if(!(fill === "No fill")){
-        context.fill();
+        if(fill === "Change in rgb value"){
+            context.fillStyle = 'rgb(' + r +',' + g + ',' + b + ')';
+            context.fill();
+        } else{
+            context.fill();
+        }
     } 
     context.strokeStyle = stroke;
     context.stroke();
@@ -201,10 +214,30 @@ function touchstart_colorSlider(e){
     }
 }
 
-// //function to update new r g b values according to color slider value
-// function update_color_value(){
-
-// }
+//function to update new r g b values according to color slider value
+function update_color_value(r,g,b){
+    if(c_circle_shape != null){
+        for(var i = 0;i < circles.length; i++){
+            var c = circles[i];
+            if(c.id === c_circle_shape.id){
+                c.rc = r;
+                c.g = g;
+                c.b = b;
+                c.fill = "Change in rgb value";
+            }
+        }
+    } else if (c_rect_shape != null){
+        for(var i = 0;i < rects.length; i++){
+            var rec = rects[i];
+            if(rec.id === c_rect_shape.id){
+                rec.r_value = r;
+                rec.g = g;
+                rec.b = b;
+                rec.fill = "Change in rgb value";
+            }
+        }
+    }
+}
 
 //handle touch move events for color range slider
 function touchmove_colorSlider(e){
@@ -237,7 +270,7 @@ function touchmove_colorSlider(e){
             drawColorRangeControl(g_color_slider, new_g);
             drawColorRangeControl(b_color_slider, new_b);
         }
-        
+        redraw();
     }
 }
 
@@ -246,6 +279,8 @@ function touchend_colorSlider(e){
     r_isDown = false;
     g_isDown = false;
     b_isDown = false;
+    c_circle_shape = null;
+    c_rect_shape = null;
 }
 
 //make range color sliders appear
@@ -327,6 +362,7 @@ function touchstart_circle(e){
 
             if(c.id>1 && !(c.fill === 'No fill')){
                 timer = setTimeout(function(){
+                    c_circle_shape = c;
                     make_color_slider_appear(c.rc,c.g,c.b);
                 }, 2000 );
             }
@@ -397,7 +433,7 @@ function touchstart_rectangle(e){
             //selected_rects.push(r);
             if(r.id>1 && !(r.fill === 'No fill')){
                 timer = setTimeout(function(){
-                    console.log("R VALUE: " + r.r_value);
+                    c_rect_shape = r;
                     make_color_slider_appear(r.r_value,r.g,r.b);
                 }, 2000 );
             }
