@@ -12,7 +12,8 @@ var offsetY=BB.top;
 var WIDTH = canvas.width;
 var HEIGHT = canvas.height;
 
-var colorslider = document.getElementById('colorRange');
+//Objects put into canvas
+var objects = [];
 
 var timer = null; // timer for tap and hold function
 //Variable flag to indicate if dragging or not
@@ -78,6 +79,15 @@ var eraser_strokes = [];
 //Variables for eraser strokes
 var startX_eraser;
 var startY_eraser;
+
+//Variables for crop
+var crops = [];
+var startX_crop;
+var startY_crop;
+var endX_crop;
+var endY_crop;
+var crop_count = 0;
+
 
 //Variables for color slider
 //Put information for r, g, and b color sliders
@@ -388,42 +398,69 @@ function make_pencil_slider_dissapear(){
 
 //Redraw all old stuff function
 function redraw(){
-    //Redraw strokes
-    for(var i=0; i<strokes.length;i++){
-            var s = strokes[i];
-            context.beginPath();
-            context.moveTo(s.start_X,s.start_Y);
-            context.lineTo(s.end_X,s.end_Y);
-            context.strokeStyle = s.strokecolor;
-            context.lineWidth = s.line_width;
-            console.log(context.lineWidth);
-            context.stroke();
+    for(var a=0; a<objects.length; a++){
+        if(objects[a].name === 'pencil'){
+             //Redraw strokes
+            for(var i=0; i<strokes.length;i++){
+                var s = strokes[i];
+                if(objects[a].id === i){
+                    context.beginPath();
+                    context.moveTo(s.start_X,s.start_Y);
+                    context.lineTo(s.end_X,s.end_Y);
+                    context.strokeStyle = s.strokecolor;
+                    context.lineWidth = s.line_width;
+                    console.log(context.lineWidth);
+                    context.stroke();
+                }
+            }
+        } else if (objects[a].name === 'rectangle'){
+            //Redraw rectangles
+            for(var i=0;i<rects.length;i++){
+                var r=rects[i];
+                if(objects[a].id === r.id){
+                    context.fillStyle=r.fill;
+                    rect(r.x,r.y,r.width,r.height, r.stroke, r.fill,r.r_value,r.g,r.b);
+                }
+            }
+        } else if (objects[a].name === 'circle'){
+            //Redraw circles
+            for(var i=0; i<circles.length;i++){
+                var c=circles[i];
+                if(objects[a].id === c.id){
+                    circle(c.x,c.y,c.r,c.fill,c.stroke, c.rc, c.g, c.b);
+                }
+            }
+        } else if (objects[a].name === 'eraser'){
+            //Redraw eraser strokes made
+            for(var i=0; i<eraser_strokes.length;i++){
+                var s = eraser_strokes[i];
+                if(objects[a].id === i){
+                    context.strokeStyle = background;
+                    context.fillStyle = background;
+                    context.beginPath();
+                    context.moveTo(s.start_X,s.start_Y);
+                    context.lineTo(s.end_X,s.end_Y);
+                    context.strokeStyle = s.strokecolor;
+                    context.lineWidth = 10;
+                    context.stroke();
+                }
+            }
+        } else if (objects[a].name === 'crop'){
+            for(var i=0;i<crops.length;i++){
+                var r=crops[i];
+                if(r.id === objects[a].id){
+                    context.beginPath();
+                    context.rect(r.x,r.y,r.width,r.height);
+                    context.lineWidth = 0;
+                    //context.strokeStyle = 'white';
+                    context.fillStyle = background;
+                    context.fill();
+                    context.closePath();
+                }   
+            }
+        } 
     }
-
-    //Redraw rectangles
-    for(var i=0;i<rects.length;i++){
-        var r=rects[i];
-        context.fillStyle=r.fill;
-        rect(r.x,r.y,r.width,r.height, r.stroke, r.fill,r.r_value,r.g,r.b);
-    }
-    //Redraw circles
-    for(var i=0; i<circles.length;i++){
-        var c=circles[i];
-        circle(c.x,c.y,c.r,c.fill,c.stroke, c.rc, c.g, c.b);
-    }
-
-    //Redraw eraser strokes made
-    for(var i=0; i<eraser_strokes.length;i++){
-        var s = eraser_strokes[i];
-        context.strokeStyle = background;
-        context.fillStyle = background;
-        context.beginPath();
-        context.moveTo(s.start_X,s.start_Y);
-        context.lineTo(s.end_X,s.end_Y);
-        context.strokeStyle = s.strokecolor;
-        context.lineWidth = 5;
-        context.stroke();
-    }
+    
 
     //Remake shape toolbox
     make_shape_toolbox();
@@ -731,6 +768,7 @@ function touchmove_circle(e){
                     if(c.id == 1){
                         if(!new_circle_made){
                             circle_count++;
+                            objects.push({name:'circle', id:circle_count});
                             circles.push({id:circle_count, x:c.x, y:c.y, r:40, fill: "No fill",stroke: "black", isDragging: true, isSelected: false, rc: 0, g:0, b:0});
                             new_circle_made = true;
                         }
@@ -879,6 +917,7 @@ function touchmove_rectangle(e){
                     if(r.id == 1){
                         if(!new_rectangle_made){
                             rect_count++;
+                            objects.push({name:'rectangle', id:rect_count});
                             rects.push({id:rect_count,x:r.x,y:r.y,width:100,height:55,fill:"No fill",stroke:"black", isDragging:true, isSelected: false, r_value: 0, g:0, b:0}); 
                             new_rectangle_made = true;
                         }
@@ -926,7 +965,7 @@ canvas.addEventListener('touchstart', function(e) {
     //Perform touchstart events for pencilSlider
     touchstart_pencilSlider(e);
 
-    if (mode === 'pencil' || mode === 'eraser'){
+    if (mode === 'pencil' || mode === 'eraser' || mode === 'crop'){
         //Remove all selections for rectangles
         if(isSelecting_rectangle == true){
             isSelecting_rectangle = false;
@@ -966,6 +1005,9 @@ canvas.addEventListener('touchstart', function(e) {
         down = true;
         startX_eraser = e.touches[0].clientX - canvas.offsetLeft;
         startY_eraser = e.touches[0].clientY - canvas.offsetTop;
+    } else if (mode === 'crop'){
+        startX_crop = e.touches[0].clientX - canvas.offsetLeft;
+        startY_crop = e.touches[0].clientY - canvas.offsetTop;
     }
 });
 
@@ -989,13 +1031,22 @@ canvas.addEventListener('touchend', function(e) {
          make_pencil_slider_dissapear();//Clear pencil range slider
     }
 
+    if(mode === 'crop'){
+        crop_count++;
+        var crop_width = endX_crop - startX_crop;
+        var crop_height = endY_crop - startY_crop;
+        objects.push({name:'crop', id:crop_count});
+        crops.push({id:crop_count,x:startX_crop-1,y:startY_crop-1,width:crop_width+2,height:crop_height+2,fill:"No fill",stroke:"black"}); 
+        redraw();
+    }
+
     down = false;
     clearTimeout(timer);
 });
 
 function draw(e){
     //Modes
-    if(dragok_circle || dragok_rectangle){
+    if(dragok_circle || dragok_rectangle || mode === 'crop'){
         clearCanvas();
     }
     console.log('mode: ' + mode)
@@ -1003,6 +1054,7 @@ function draw(e){
         xPos = e.touches[0].clientX - canvas.offsetLeft;
         yPos = e.touches[0].clientY - canvas.offsetTop;
         if (down == true) {
+            objects.push({name:'eraser', id:eraser_strokes.length});
             eraser_strokes.push({start_X:startX_eraser, start_Y: startY_eraser, end_X: xPos, end_Y: yPos});
             startX_eraser = xPos;
             startY_eraser = yPos;
@@ -1011,10 +1063,22 @@ function draw(e){
         var xPos = e.touches[0].clientX - canvas.offsetLeft;
         var yPos = e.touches[0].clientY - canvas.offsetTop;
         if (down == true) {
+            objects.push({name:'pencil', id:strokes.length});
             strokes.push({start_X:startX, start_Y: startY, end_X: xPos, end_Y: yPos, strokecolor: pencilcolor, line_width: pencil_width});
             startX = xPos;
             startY = yPos;
         }
+    }  else if (mode === 'crop'){
+        var mx=parseInt(e.touches[0].clientX-offsetX);
+        var my=parseInt(e.touches[0].clientY-offsetY);
+        endX_crop = mx;
+        endY_crop = my;
+        context.beginPath();
+        context.rect(startX_crop,startY_crop,(endX_crop - startX_crop),(endY_crop - startY_crop));
+        context.lineWidth = 1;
+        context.strokeStyle = 'black';
+        context.stroke();
+        context.closePath();
     }
 
     touchmove_rectangle(e);
@@ -1096,9 +1160,11 @@ function clearCanvas() {
 //     context.lineWidth = size;
 // }
 
-function fillCanvas() {
+function clearCanvas() {
     background = context.fillStyle;
     context.fillRect(0, 0, canvas.width, canvas.height);
+    reset();
+    make_shape_toolbox();
 }
 
 //unction changeBrushStyle(brushStyle) {context.lineCap = brushStyle;}
@@ -1147,6 +1213,54 @@ function fillCanvas() {
 //         sidebar.style.left = '0px';
 //     }
 // }
+
+//Function to reset all variables to normal
+function reset(){
+    objects = [];
+    timer = null;
+    isDragging = false;
+    isSelecting_rectangle = false;
+    isSelecting_circle = false;
+    rects=[];
+    new_rectangle_made = false; 
+    rect_count = 1; 
+    rects.push({id:0,x:35,y:20,width:150,height:175,fill:"No fill",stroke:"black",isDragging:false,isSelected:false, r_value:0, g:0, b:0});
+    rects.push({id:1,x:75-15,y:50-15,width:100,height:55,fill:"No fill",stroke: "black",isDragging:false,isSelected: false, r_value:0, g:0, b:0});
+    gesture_or_not_rectangle = false; //Flag to tell if gesture going to start or not
+    dragok_rectangle = false;
+    startX_rectangle = 0;
+    startY_rectangle = 0;
+    startX1_rectangle = 0;
+    startY1_rectangle = 0;
+    circles = [];
+    new_circle_made = false; //Flag to tell if a new circle is made or not
+    circle_count = 1;  // Count number of circles -> is the id of each rectangle
+    circles.push({id:1, x:110, y:145, r:40, fill: "No fill",stroke: "black", isDragging: false, isSelected: false, rc:0, g:0, b:0});
+    gesture_or_not_circle = false; //Flag to tell if gesture going to start or not
+    dragok_circle = false;
+    startX_circle = 0;
+    startY_circle = 0;
+    startX1_circle = 0;
+    startY1_circle = 0;
+    context.lineWidth = 5;
+    down = false;
+    mode = 'pencil';
+    background = 'white';
+    strokes = [];
+    startX = 0;
+    startY = 0;
+    pencilcolor = 'black'; //initial stroke color
+    eraser_strokes = [];
+    startX_eraser = 0;
+    startY_eraser = 0;
+    crops = [];
+    startX_crop = 0;
+    startY_crop = 0;
+    endX_crop = 0;
+    endY_crop = 0;
+    crop_count = 0;
+}
+
 function eraserModeStart(){
     curMode = 'eraser';
     console.log('Mode change to eraser');
@@ -1156,6 +1270,9 @@ function pencilModeStart(){
     curMode = 'pencil';
     console.log('Mode change to pencil');
 }
-function changeMode(curMode) {
- mode = curMode;
+
+function cropModeStart(){
+    curMode = 'crop';
+    console.log('Mode change to crop');
 }
+
