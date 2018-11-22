@@ -228,29 +228,14 @@ function clearColorRangeControl(range){
 function touchstart_pencilSlider(e){
     var mx=0;
     var my=0;
-    // if(e.touches.length == 2){
-    //     mx=parseInt(e.touches[1].clientX-offsetX);
-    //     my=parseInt(e.touches[1].clientY-offsetY);
-    //     if(mx>r_color_slider.x && mx<r_color_slider.x+r_color_slider.width && my>r_color_slider.y-r_color_slider.height/2 && my<r_color_slider.y+r_color_slider.height/2){
-    //         r_isDown = true;
-    //         mode = 'red color slider';
-    //     } 
-    //     else if (mx>g_color_slider.x && mx<g_color_slider.x+g_color_slider.width && my>g_color_slider.y-g_color_slider.height/2 && my<g_color_slider.y+g_color_slider.height/2){
-    //         g_isDown = true;
-    //         mode = 'green color slider';
-    //     }
-    //     else if (mx>b_color_slider.x && mx<b_color_slider.x+b_color_slider.width && my>b_color_slider.y-b_color_slider.height/2 && my<b_color_slider.y+b_color_slider.height/2){
-    //         b_isDown = true;
-    //         mode = 'blue color slider';
-    //     }
-    // } 
-
-    mx=parseInt(e.touches[0].clientX-offsetX);
-    my=parseInt(e.touches[0].clientY-offsetY);
-    if(mx>p_slider.x && mx<p_slider.x+p_slider.width && my>p_slider.y-p_slider.height/2 && my<p_slider.y+p_slider.height/2){
-        p_isDown = true;
-        mode = 'pencil slider';
-    } 
+    if(e.touches.length == 2){
+        mx=parseInt(e.touches[1].clientX-offsetX);
+        my=parseInt(e.touches[1].clientY-offsetY);
+        if(mx>p_slider.x && mx<p_slider.x+p_slider.width && my>p_slider.y-p_slider.height/2 && my<p_slider.y+p_slider.height/2){
+            p_isDown = true;
+            mode = 'pencil slider';
+        } 
+    }
 }
 
 //handle touch start events for color range slider
@@ -309,10 +294,10 @@ function update_pencil_value(new_width){
 //handle touch move events for pencil width range slider
 function touchmove_pencilSlider(e){
     if(p_isDown){
-        // touchX=parseInt(e.touches[1].clientX-offsetX);
-        // touchY=parseInt(e.touches[1].clientY-offsetY);
-        touchX=parseInt(e.touches[0].clientX-offsetX);
-        touchY=parseInt(e.touches[0].clientY-offsetY);
+        touchX=parseInt(e.touches[1].clientX-offsetX);
+        touchY=parseInt(e.touches[1].clientY-offsetY);
+        // touchX=parseInt(e.touches[0].clientX-offsetX);
+        // touchY=parseInt(e.touches[0].clientY-offsetY);
         // set new thumb & redraw
         p_slider.pct=Math.max(0,Math.min(1,(touchX-p_slider.x)/p_slider.width));
         var new_width= p_slider.pct*40;
@@ -1105,47 +1090,47 @@ function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function changeBrushSize(size) {
-    context.lineWidth = size;
-}
+// function changeBrushSize(size) {
+//     context.lineWidth = size;
+// }
 
 function fillCanvas() {
     background = context.fillStyle;
     context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function changeBrushStyle(brushStyle) {context.lineCap = brushStyle;}
+//unction changeBrushStyle(brushStyle) {context.lineCap = brushStyle;}
 
-function triggerClick() {document.getElementById('file').click();}
+// function triggerClick() {document.getElementById('file').click();}
 
-document.getElementById('file').addEventListener('change', function(e) {
-    clearCanvas();
-    URL = URL || webkitURL;
-    var temp = URL.createObjectURL(e.target.files[0]);
-    var image = new Image();
-    image.src = temp;
-    image.addEventListener('load', function() {
-        imageWidth = image.naturalWidth;
-        imageHeight = image.naturalHeight;
-        newImageWidth = imageWidth;
-        newImageHeight = imageHeight;
-        originalImageRatio = imageWidth / imageHeight;
-        if (newImageWidth > newImageHeight && newImageWidth > canvas.width) {
-            newImageWidth = canvas.width;
-            newImageHeight = canvas.width / originalImageRatio;
-        }
-        if (newImageHeight > newImageWidth && newImageHeight > canvas.height) {
-            newImageHeight = canvas.height;
-            newImageWidth = canvas.height * originalImageRatio;
-        }
-        if (newImageWidth == newImageHeight && newImageHeight > canvas.height) {
-            newImageHeight = canvas.height;
-            newImageWidth = canvas.height * originalImageRatio;
-        }
-        context.drawImage(image, 0, 0, newImageWidth, newImageHeight);//last two argument is x y original location where you want to put your img
-        URL.revokeObjectURL(temp);// release the reference to this img
-    });
-});
+// document.getElementById('file').addEventListener('change', function(e) {
+//     clearCanvas();
+//     URL = URL || webkitURL;
+//     var temp = URL.createObjectURL(e.target.files[0]);
+//     var image = new Image();
+//     image.src = temp;
+//     image.addEventListener('load', function() {
+//         imageWidth = image.naturalWidth;
+//         imageHeight = image.naturalHeight;
+//         newImageWidth = imageWidth;
+//         newImageHeight = imageHeight;
+//         originalImageRatio = imageWidth / imageHeight;
+//         if (newImageWidth > newImageHeight && newImageWidth > canvas.width) {
+//             newImageWidth = canvas.width;
+//             newImageHeight = canvas.width / originalImageRatio;
+//         }
+//         if (newImageHeight > newImageWidth && newImageHeight > canvas.height) {
+//             newImageHeight = canvas.height;
+//             newImageWidth = canvas.height * originalImageRatio;
+//         }
+//         if (newImageWidth == newImageHeight && newImageHeight > canvas.height) {
+//             newImageHeight = canvas.height;
+//             newImageWidth = canvas.height * originalImageRatio;
+//         }
+//         context.drawImage(image, 0, 0, newImageWidth, newImageHeight);//last two argument is x y original location where you want to put your img
+//         URL.revokeObjectURL(temp);// release the reference to this img
+//     });
+// });
 
 // function sideBarTouchStart(event) {
 //     sidebarStartX = event.touches[0].clientX;

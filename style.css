@@ -14,7 +14,7 @@ button {
 }
 #drawingTools {
     width: 1000px;
-    height: 135px;
+    height: 75px;
     margin: 0px auto;
 }
 #colors {
@@ -45,66 +45,23 @@ button {
 }
 #otherTools {
     width: 100%;
-    height: 115px;
+    height: 50px;
 }
 #otherTools button {
-    width: 20%;
+    width: 33%;
     height: 50px;
     margin-top: 5px;
     background: #303030;
     color: white;
     cursor: pointer; /* a hand will appear when hover the mouse to the button*/
-    float: left;
+    float: center;
 }
 #otherTools button:hover {opacity: 0.5;}
 
 #clearCanvas {font: 25px Impact;}
-#brushSize1 {font: 10px Impact;}
-#brushSize2 {font: 20px Impact;}
-#brushSize3 {font: 30px impact;}
-#brushSize4 {font: 40px impact;}
 #fillCanvas {font: 25px Impact;}
-#buttBrush, #squareBrush, #roundBrush {font: 18px "Arial Black";}
-#otherTools #openFile {font: 25px "Arial Black";}
-#file { visibility: hidden;}
+#cropCanvas {font: 25px Impact;}
 
-#sidebar {
-    text-align: center;
-    position: fixed;
-    width: 300px;
-    height: 100%;
-    background:rgba(21,23,25,0.9);
-    left: 0px;
-    transition: all 500ms linear;
-}
-#sidebar ul {
-    text-align: center;
-}
-#sidebar ul li {
-    display: inline;
-    list-style: none;
-    text-decoration: none;
-    color: rgba(230, 230, 230, 0.9);
-    padding: 15px 15px;
-    border-bottom: 1px solid rgba(100, 100, 100, 0.3);
-    font-size:48px;
-    margin-right: 50px;
-    color:white;
-}
-#sidebar .toggle-btn {
-    position:absolute;
-    height:100%;
-    width: 100px;
-    left: 330px;
-    top:600px;
-}
-#sidebar .toggle-btn span{
-    display: block;
-    width: 30px;
-    height: 5px;
-    background: #151719;
-    margin: 5px 0px;
-}
 
 
 
