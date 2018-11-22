@@ -140,7 +140,7 @@ function circle(x,y,r,fill,stroke,rc,g,b){
     context.lineWidth = 3;
     if(!(fill === "No fill")){
         if(fill === "Change in rgb value"){
-            context.fillStyle = 'rgb(' + r +',' + g + ',' + b + ')';
+            context.fillStyle = 'rgb(' + rc +',' + g + ',' + b + ')';
             context.fill();
         } else{
             context.fill();
@@ -198,7 +198,11 @@ function touchstart_colorSlider(e){
     if(e.touches.length == 2){
         mx=parseInt(e.touches[1].clientX-offsetX);
         my=parseInt(e.touches[1].clientY-offsetY);
-    }
+    } 
+    // else {
+    //     mx=parseInt(e.touches[0].clientX-offsetX);
+    //     my=parseInt(e.touches[0].clientY-offsetY);
+    // }
     // test for possible start of dragging
     if(mx>r_color_slider.x && mx<r_color_slider.x+r_color_slider.width && my>r_color_slider.y-r_color_slider.height/2 && my<r_color_slider.y+r_color_slider.height/2){
         r_isDown = true;
@@ -230,6 +234,7 @@ function update_color_value(r,g,b){
         for(var i = 0;i < rects.length; i++){
             var rec = rects[i];
             if(rec.id === c_rect_shape.id){
+                console.log("REACHED HERE!!");
                 rec.r_value = r;
                 rec.g = g;
                 rec.b = b;
@@ -244,6 +249,8 @@ function touchmove_colorSlider(e){
     if(r_isDown || g_isDown || b_isDown){
         touchX=parseInt(e.touches[1].clientX-offsetX);
         touchY=parseInt(e.touches[1].clientY-offsetY);
+        //touchX=parseInt(e.touches[0].clientX-offsetX);
+        //touchY=parseInt(e.touches[0].clientY-offsetY);
         // set new thumb & redraw
         var new_r =r_color_slider.pct*255;
         var new_g =g_color_slider.pct*255;
@@ -279,8 +286,10 @@ function touchend_colorSlider(e){
     r_isDown = false;
     g_isDown = false;
     b_isDown = false;
-    c_circle_shape = null;
-    c_rect_shape = null;
+    if(e.touches.length === 0) {
+        c_circle_shape = null;
+        c_rect_shape = null;
+    }
 }
 
 //make range color sliders appear
@@ -755,7 +764,7 @@ function touchmove_rectangle(e){
                     if(r.id == 1){
                         if(!new_rectangle_made){
                             rect_count++;
-                            rects.push({id:rect_count,x:r.x,y:r.y,width:100,height:55,fill:"No fill",stroke:"black", isDragging:true, isSelected: false, r: 0, g:0, b:0}); 
+                            rects.push({id:rect_count,x:r.x,y:r.y,width:100,height:55,fill:"No fill",stroke:"black", isDragging:true, isSelected: false, r_value: 0, g:0, b:0}); 
                             new_rectangle_made = true;
                         }
                     } 
