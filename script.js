@@ -198,24 +198,24 @@ function touchstart_colorSlider(e){
     if(e.touches.length == 2){
         mx=parseInt(e.touches[1].clientX-offsetX);
         my=parseInt(e.touches[1].clientY-offsetY);
+        if(mx>r_color_slider.x && mx<r_color_slider.x+r_color_slider.width && my>r_color_slider.y-r_color_slider.height/2 && my<r_color_slider.y+r_color_slider.height/2){
+            r_isDown = true;
+            mode = 'red color slider';
+        } 
+        else if (mx>g_color_slider.x && mx<g_color_slider.x+g_color_slider.width && my>g_color_slider.y-g_color_slider.height/2 && my<g_color_slider.y+g_color_slider.height/2){
+            g_isDown = true;
+            mode = 'green color slider';
+        }
+        else if (mx>b_color_slider.x && mx<b_color_slider.x+b_color_slider.width && my>b_color_slider.y-b_color_slider.height/2 && my<b_color_slider.y+b_color_slider.height/2){
+            b_isDown = true;
+            mode = 'blue color slider';
+        }
     } 
     // else {
     //     mx=parseInt(e.touches[0].clientX-offsetX);
     //     my=parseInt(e.touches[0].clientY-offsetY);
     // }
     // test for possible start of dragging
-    if(mx>r_color_slider.x && mx<r_color_slider.x+r_color_slider.width && my>r_color_slider.y-r_color_slider.height/2 && my<r_color_slider.y+r_color_slider.height/2){
-        r_isDown = true;
-        mode = 'red color slider';
-    } 
-    else if (mx>g_color_slider.x && mx<g_color_slider.x+g_color_slider.width && my>g_color_slider.y-g_color_slider.height/2 && my<g_color_slider.y+g_color_slider.height/2){
-        g_isDown = true;
-        mode = 'green color slider';
-    }
-    else if (mx>b_color_slider.x && mx<b_color_slider.x+b_color_slider.width && my>b_color_slider.y-b_color_slider.height/2 && my<b_color_slider.y+b_color_slider.height/2){
-        b_isDown = true;
-        mode = 'blue color slider';
-    }
 }
 
 //function to update new r g b values according to color slider value
