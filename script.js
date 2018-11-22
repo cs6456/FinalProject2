@@ -15,7 +15,6 @@ var HEIGHT = canvas.height;
 var colorslider = document.getElementById('colorRange');
 
 var timer = null; // timer for tap and hold function
-
 //Variable flag to indicate if dragging or not
 var isDragging = false;
 
@@ -71,6 +70,8 @@ var strokes = [];
 var startX;
 var startY;
 var pencilcolor = 'black'; //initial stroke color
+var pencil_width = 3; // Variable to keep track of current line width
+
 
 // an array of objects that define different eraser strokes
 var eraser_strokes = [];
@@ -91,6 +92,10 @@ var g_isDown = false; //Flag variable to check if it is possible to move slider 
 var b_isDown = false; //Flag variable to check if it is possible to move slider in range slider for color slider
 var c_rect_shape = null; //variable to keep track of selected rectangle for color change with slider
 var c_circle_shape = null; //variable to keep track of selected circle for color change with slider
+
+//Variables for pencil-width or size slider
+var p_slider = makeRangeControl(50,450,200,25, "black");
+var p_isDown = false; //Flag variable to check if it is possible to move slider in range slider for pencil width slider
 
 window.onload=function(){
     init();
@@ -187,9 +192,65 @@ function drawColorRangeControl(range,value){
     context.fillText(parseInt(range.pct*255),range.x+range.width/2,range.y-range.height/2-2);
 }
 
+//Draw pencil range slider
+function drawPencilRangeControl(range,value){
+    // clear the range control area
+    range.pct = value/40;
+    // bar
+    context.lineWidth=6;
+    context.lineCap='round';
+    context.beginPath();
+    context.moveTo(range.x,range.y);
+    context.lineTo(range.x1,range.y);
+    context.strokeStyle=range.fill;
+    context.stroke();
+    // thumb
+    context.beginPath();
+    var thumbX=range.x+range.width*range.pct;
+    context.moveTo(thumbX,range.y-range.height/2);
+    context.lineTo(thumbX,range.y+range.height/2);
+    context.strokeStyle='rgba(255,0,0,0.25)';
+    context.stroke();
+    // legend
+    context.fillStyle='black';
+    context.textAlign='center';
+    context.textBaseline='top';
+    context.font='10px arial';
+    context.fillText(parseInt(range.pct*40),range.x+range.width/2,range.y-range.height/2-2);
+}
+
 //Clear color slider function
 function clearColorRangeControl(range){
     context.clearRect(range.x-12.5,range.y-range.height/2-15,range.width+25,range.height+20);
+}
+
+//handle touch start events for pencil width range slider
+function touchstart_pencilSlider(e){
+    var mx=0;
+    var my=0;
+    // if(e.touches.length == 2){
+    //     mx=parseInt(e.touches[1].clientX-offsetX);
+    //     my=parseInt(e.touches[1].clientY-offsetY);
+    //     if(mx>r_color_slider.x && mx<r_color_slider.x+r_color_slider.width && my>r_color_slider.y-r_color_slider.height/2 && my<r_color_slider.y+r_color_slider.height/2){
+    //         r_isDown = true;
+    //         mode = 'red color slider';
+    //     } 
+    //     else if (mx>g_color_slider.x && mx<g_color_slider.x+g_color_slider.width && my>g_color_slider.y-g_color_slider.height/2 && my<g_color_slider.y+g_color_slider.height/2){
+    //         g_isDown = true;
+    //         mode = 'green color slider';
+    //     }
+    //     else if (mx>b_color_slider.x && mx<b_color_slider.x+b_color_slider.width && my>b_color_slider.y-b_color_slider.height/2 && my<b_color_slider.y+b_color_slider.height/2){
+    //         b_isDown = true;
+    //         mode = 'blue color slider';
+    //     }
+    // } 
+
+    mx=parseInt(e.touches[0].clientX-offsetX);
+    my=parseInt(e.touches[0].clientY-offsetY);
+    if(mx>p_slider.x && mx<p_slider.x+p_slider.width && my>p_slider.y-p_slider.height/2 && my<p_slider.y+p_slider.height/2){
+        p_isDown = true;
+        mode = 'pencil slider';
+    } 
 }
 
 //handle touch start events for color range slider
@@ -212,11 +273,6 @@ function touchstart_colorSlider(e){
             mode = 'blue color slider';
         }
     } 
-    // else {
-    //     mx=parseInt(e.touches[0].clientX-offsetX);
-    //     my=parseInt(e.touches[0].clientY-offsetY);
-    // }
-    // test for possible start of dragging
 }
 
 //function to update new r g b values according to color slider value
@@ -242,6 +298,29 @@ function update_color_value(r,g,b){
                 rec.fill = "Change in rgb value";
             }
         }
+    }
+}
+
+//function to update new width value according to pencil width slider value
+function update_pencil_value(new_width){
+    pencil_width = new_width;
+}
+
+//handle touch move events for pencil width range slider
+function touchmove_pencilSlider(e){
+    if(p_isDown){
+        // touchX=parseInt(e.touches[1].clientX-offsetX);
+        // touchY=parseInt(e.touches[1].clientY-offsetY);
+        touchX=parseInt(e.touches[0].clientX-offsetX);
+        touchY=parseInt(e.touches[0].clientY-offsetY);
+        // set new thumb & redraw
+        p_slider.pct=Math.max(0,Math.min(1,(touchX-p_slider.x)/p_slider.width));
+        var new_width= p_slider.pct*40;
+        context.clearRect(p_slider.x-12.5,p_slider.y-p_slider.height/2-15,p_slider.width+25,p_slider.height+20);
+        drawPencilRangeControl(p_slider, new_width);
+        update_pencil_value(new_width);
+       
+        //update_color_value(new_r,new_g,new_b);
     }
 }
 
@@ -293,6 +372,11 @@ function touchend_colorSlider(e){
     }
 }
 
+//handle touch end events for pencil range slider
+function touchend_pencilSlider(e){
+    p_isDown = false;
+}
+
 //make range color sliders appear
 function make_color_slider_appear(r,g,b){
     drawColorRangeControl(r_color_slider,r);
@@ -317,6 +401,8 @@ function redraw(){
             context.moveTo(s.start_X,s.start_Y);
             context.lineTo(s.end_X,s.end_Y);
             context.strokeStyle = s.strokecolor;
+            context.lineWidth = s.line_width;
+            console.log(context.lineWidth);
             context.stroke();
     }
 
@@ -829,6 +915,8 @@ canvas.addEventListener('touchstart', function(e) {
     touchstart_circle(e);
     //Perform touchstart events for color slider
     touchstart_colorSlider(e);
+    //Perform touchstart events for pencilSlider
+    touchstart_pencilSlider(e);
 
     if (mode === 'pencil') {
 
@@ -858,12 +946,14 @@ canvas.addEventListener('touchstart', function(e) {
             }
         }
 
+        timer = setTimeout(function(){
+                    drawPencilRangeControl(p_slider, pencil_width);
+                }, 2000 );
+
         down = true;
-        //context.beginPath();
         startX = e.touches[0].clientX - canvas.offsetLeft;
         startY = e.touches[0].clientY - canvas.offsetTop;
-        //context.moveTo(xPos, yPos);
-        //canvas.addEventListener("touchmove", draw);
+        
     } else if (mode === 'eraser') {
         down = true;
         //context.beginPath();
@@ -885,11 +975,15 @@ canvas.addEventListener('touchend', function(e) {
     touchend_circle(e);
     //Perform touchend events for color slider
     touchend_colorSlider(e);
+    //Perform touchend events for pencil slider
+    touchend_pencilSlider(e);
+
     //Make color slider dissapear on not touching
     if(e.touches.length == 0){
          make_color_slider_dissapear();
+         clearColorRangeControl(p_slider);//Clear pencil range slider
     }
-    //mode = "pencil";
+
     down = false;
     clearTimeout(timer);
 });
@@ -925,7 +1019,7 @@ function draw(e){
         var xPos = e.touches[0].clientX - canvas.offsetLeft;
         var yPos = e.touches[0].clientY - canvas.offsetTop;
         if (down == true) {
-            strokes.push({start_X:startX, start_Y: startY, end_X: xPos, end_Y: yPos, strokecolor: pencilcolor});
+            strokes.push({start_X:startX, start_Y: startY, end_X: xPos, end_Y: yPos, strokecolor: pencilcolor, line_width: pencil_width});
             startX = xPos;
             startY = yPos;
         }
@@ -934,6 +1028,7 @@ function draw(e){
     touchmove_rectangle(e);
     touchmove_circle(e);
     touchmove_colorSlider(e);
+    touchmove_pencilSlider(e);
     redraw();
 }
 
