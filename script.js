@@ -392,6 +392,12 @@ function make_color_slider_dissapear(){
     redraw();
 }
 
+//Make pencil width slider dissapear
+function make_pencil_slider_dissapear(){
+    clearColorRangeControl(p_slider);
+    redraw();
+}
+
 //Redraw all old stuff function
 function redraw(){
     //Redraw strokes
@@ -981,7 +987,7 @@ canvas.addEventListener('touchend', function(e) {
     //Make color slider dissapear on not touching
     if(e.touches.length == 0){
          make_color_slider_dissapear();
-         clearColorRangeControl(p_slider);//Clear pencil range slider
+         make_pencil_slider_dissapear();//Clear pencil range slider
     }
 
     down = false;
