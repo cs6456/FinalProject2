@@ -1160,9 +1160,9 @@ function clearCanvas() {
 //     context.lineWidth = size;
 // }
 
-function clearCanvas() {
+function resetCanvas() {
     background = context.fillStyle;
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height);
     reset();
     make_shape_toolbox();
 }
