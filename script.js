@@ -70,6 +70,7 @@ var strokes = [];
 //Variables for strokes
 var startX;
 var startY;
+var pencilcolor = 'black'; //initial stroke color
 
 // an array of objects that define different eraser strokes
 var eraser_strokes = [];
@@ -304,10 +305,21 @@ function make_color_slider_dissapear(){
     clearColorRangeControl(r_color_slider);
     clearColorRangeControl(g_color_slider);
     clearColorRangeControl(b_color_slider);
+    redraw();
 }
 
 //Redraw all old stuff function
 function redraw(){
+    //Redraw strokes
+    for(var i=0; i<strokes.length;i++){
+            var s = strokes[i];
+            context.beginPath();
+            context.moveTo(s.start_X,s.start_Y);
+            context.lineTo(s.end_X,s.end_Y);
+            context.strokeStyle = s.strokecolor;
+            context.stroke();
+    }
+
     //Redraw rectangles
     for(var i=0;i<rects.length;i++){
         var r=rects[i];
@@ -390,6 +402,12 @@ function touchstart_circle(e){
         }
     }
 
+    if(first == false){
+        if(!(mode==='rectangle')){
+            mode = 'pencil';
+        }
+    }
+
     //Save current touch position
     startX_circle=mx;
     startY_circle=my;
@@ -405,14 +423,12 @@ function touchstart_rectangle(e){
     var my_1 = 0;
     console.log('x coordinate of touch ' + mx);
     console.log('y coordinate of touch ' + my);
-    console.log(mode);
 
     if(e.touches.length === 2){
         mx_1 = parseInt(e.touches[1].clientX-offsetX);
         my_1 = parseInt(e.touches[1].clientY-offsetY);
         console.log('x coordinate of 2nd touch ' + mx_1);
         console.log('y coordinate of 2nd touch ' + my_1);
-        console.log(mode);
     }
 
     // test each rectangle to see if touch coordinate is inside or not
@@ -457,6 +473,11 @@ function touchstart_rectangle(e){
             startX1_rectangle=mx_1;
             startY1_rectangle=my_1;
         }
+    }
+
+    if(first == false){
+        console.log("REACHED!");
+        mode = 'pencil';
     }
 
     // save the current touch position
@@ -803,9 +824,9 @@ canvas.addEventListener('touchstart', function(e) {
 
     //Preform touchstart events for rectangle
     touchstart_rectangle(e);
+    console.log(mode);
     //Perform touchstart events for circle
     touchstart_circle(e);
-
     //Perform touchstart events for color slider
     touchstart_colorSlider(e);
 
@@ -868,7 +889,7 @@ canvas.addEventListener('touchend', function(e) {
     if(e.touches.length == 0){
          make_color_slider_dissapear();
     }
-    mode = "pencil";
+    //mode = "pencil";
     down = false;
     clearTimeout(timer);
 });
@@ -880,44 +901,31 @@ function draw(e){
     }
     console.log('mode: ' + mode)
     if (mode === 'eraser') {
-        context.strokeStyle = background;
-        context.fillStyle = background;
-        if(eraser_strokes.length   >0){
-            for(var i=0; i<eraser_strokes.length;i++){
-                var s = eraser_strokes[i];
-                context.moveTo(s.start_X,s.start_Y);
-                context.lineTo(s.end_X,s.end_Y);
-                context.stroke();
-            }
-        }
-        xPos = e.touches[0].clientX - canvas.offsetLeft;
-        yPos = e.touches[0].clientY - canvas.offsetTop;
+        // context.strokeStyle = background;
+        // context.fillStyle = background;
+        // if(eraser_strokes.length   >0){
+        //     for(var i=0; i<eraser_strokes.length;i++){
+        //         var s = eraser_strokes[i];
+        //         context.moveTo(s.start_X,s.start_Y);
+        //         context.lineTo(s.end_X,s.end_Y);
+        //         context.stroke();
+        //     }
+        // }
+        // xPos = e.touches[0].clientX - canvas.offsetLeft;
+        // yPos = e.touches[0].clientY - canvas.offsetTop;
+        // if (down == true) {
+        //     context.moveTo(startX_eraser, startY_eraser);
+        //     context.lineTo(xPos, yPos);
+        //     context.stroke();
+        //     eraser_strokes.push({start_X:startX_eraser, start_Y: startY_eraser, end_X: xPos, end_Y: yPos});
+        //     startX_eraser = xPos;
+        //     startY_eraser = yPos;
+        // }
+    } else if (mode === 'pencil'){
+        var xPos = e.touches[0].clientX - canvas.offsetLeft;
+        var yPos = e.touches[0].clientY - canvas.offsetTop;
         if (down == true) {
-            context.moveTo(startX_eraser, startY_eraser);
-            context.lineTo(xPos, yPos);
-            context.stroke();
-            strokes.push({start_X:startX_eraser, start_Y: startY_eraser, end_X: xPos, end_Y: yPos});
-            startX_eraser = xPos;
-            startY_eraser = yPos;
-        }
-    } else {
-        //Draw all previous strokes
-        if(strokes.length>0){
-            for(var i=0; i<strokes.length;i++){
-                var s = strokes[i];
-                context.moveTo(s.start_X,s.start_Y);
-                context.lineTo(s.end_X,s.end_Y);
-                context.stroke();
-            }
-        }
-        
-        xPos = e.touches[0].clientX - canvas.offsetLeft;
-        yPos = e.touches[0].clientY - canvas.offsetTop;
-        if (down == true) {
-            context.moveTo(startX, startY);
-            context.lineTo(xPos, yPos);
-            context.stroke();
-            strokes.push({start_X:startX, start_Y: startY, end_X: xPos, end_Y: yPos});
+            strokes.push({start_X:startX, start_Y: startY, end_X: xPos, end_Y: yPos, strokecolor: pencilcolor});
             startX = xPos;
             startY = yPos;
         }
@@ -956,32 +964,39 @@ function changeColor(color){
         green=0;
         blue=255;
     }
+    console.log(mode);
+    if(mode === 'pencil'){
+        console.log("REACHED!");
+        pencilcolor = color;
+    } else {
+         //Change color of selected objects
+        if(isSelecting_rectangle){
+            for(var i = 0; i < rects.length;i++){
+                var r = rects[i];
+                if(r.isSelected){
+                    r.fill = color;
+                    r.r_value = red;
+                    r.g = green;
+                    r.b = blue;
+                }
+            }
+            redraw();
+        }
+        if(isSelecting_circle){
+            for(var i = 0; i < circles.length;i++){
+                var c = circles[i];
+                if(c.isSelected){
+                    c.fill = color;
+                    c.rc = red;
+                    c.g = green;
+                    c.b = blue;
+                }
+            }
+            redraw();
+        }
+    }
 
-    //Change color of selected objects
-    if(isSelecting_rectangle){
-        for(var i = 0; i < rects.length;i++){
-            var r = rects[i];
-            if(r.isSelected){
-                r.fill = color;
-                r.r_value = red;
-                r.g = green;
-                r.b = blue;
-            }
-        }
-        redraw();
-    }
-    if(isSelecting_circle){
-        for(var i = 0; i < circles.length;i++){
-            var c = circles[i];
-            if(c.isSelected){
-                c.fill = color;
-                c.rc = red;
-                c.g = green;
-                c.b = blue;
-            }
-        }
-        redraw();
-    }
+   
     //context.fillStyle = color;
 }
 
