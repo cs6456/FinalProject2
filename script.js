@@ -1067,7 +1067,6 @@ canvas.addEventListener('touchend', function(e) {
     }
 
     down = false;
-    clearTimeout(timer);
 
     if(is_clear == true){
         is_clear = false;
@@ -1075,6 +1074,9 @@ canvas.addEventListener('touchend', function(e) {
     } else {
         is_clear = false;
     }
+
+    clearTimeout(timer);
+
 });
 
 function draw(e){
@@ -1226,7 +1228,7 @@ function clearCanvas() {
 // }
 
 function resetCanvas() {
-    background = context.fillStyle;
+    //background = context.fillStyle;
     context.clearRect(0, 0, canvas.width, canvas.height);
     reset();
     make_shape_toolbox();
