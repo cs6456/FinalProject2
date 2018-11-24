@@ -398,6 +398,10 @@ function make_pencil_slider_dissapear(){
 
 //Redraw all old stuff function
 function redraw(){
+    //Redraw background of canvas
+    context.fillStyle = background;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
     for(var a=0; a<objects.length; a++){
         if(objects[a].name === 'pencil'){
              //Redraw strokes
@@ -1049,6 +1053,7 @@ function draw(e){
     if(dragok_circle || dragok_rectangle || mode === 'crop'){
         clearCanvas();
     }
+    redraw();
     console.log('mode: ' + mode)
     if (mode === 'eraser') {
         xPos = e.touches[0].clientX - canvas.offsetLeft;
@@ -1075,8 +1080,9 @@ function draw(e){
         endY_crop = my;
         context.beginPath();
         context.rect(startX_crop,startY_crop,(endX_crop - startX_crop),(endY_crop - startY_crop));
-        context.lineWidth = 1;
+        context.lineWidth = 10;
         context.strokeStyle = 'black';
+        console.log("REACHED!");
         context.stroke();
         context.closePath();
     }
@@ -1086,7 +1092,7 @@ function draw(e){
     touchmove_colorSlider(e);
     touchmove_pencilSlider(e);
     clearTimeout(timer);
-    redraw();
+    //redraw();
 }
 
 function changeColor(color){
@@ -1120,6 +1126,9 @@ function changeColor(color){
     if(mode === 'pencil'){
         console.log("REACHED!");
         pencilcolor = color;
+    } else if (mode === 'fill'){
+        background = color;
+        redraw();
     } else {
          //Change color of selected objects
         if(isSelecting_rectangle){
@@ -1259,6 +1268,11 @@ function reset(){
     endX_crop = 0;
     endY_crop = 0;
     crop_count = 0;
+}
+
+function fillCanvasModeStart(){
+    mode = 'fill';
+    console.log('Mode change to fill');
 }
 
 function eraserModeStart(){
