@@ -145,7 +145,6 @@ function make_shape_toolbox(){
     context.font='20px arial';
     context.fillText("X",r.x+140,r.y);
 
-    //rect(r.x,r.y,r.width,r.height, r.stroke,"Change in rgb value",255,r.g,r.b);
     r = rects[1];
     rect(r.x,r.y,r.width,r.height, r.stroke,r.fill, r.r_value,r.g,r.b);
     var c = circles[0];
@@ -331,16 +330,13 @@ function touchmove_pencilSlider(e){
     if(p_isDown){
         touchX=parseInt(e.touches[1].clientX-offsetX);
         touchY=parseInt(e.touches[1].clientY-offsetY);
-        // touchX=parseInt(e.touches[0].clientX-offsetX);
-        // touchY=parseInt(e.touches[0].clientY-offsetY);
+
         // set new thumb & redraw
         p_slider.pct=Math.max(0,Math.min(1,(touchX-p_slider.x)/p_slider.width));
         var new_width= p_slider.pct*40;
         context.clearRect(p_slider.x-12.5,p_slider.y-p_slider.height/2-15,p_slider.width+25,p_slider.height+20);
         drawPencilRangeControl(p_slider, new_width);
         update_pencil_value(new_width);
-       
-        //update_color_value(new_r,new_g,new_b);
     }
 }
 
@@ -349,8 +345,7 @@ function touchmove_colorSlider(e){
     if(r_isDown || g_isDown || b_isDown){
         touchX=parseInt(e.touches[1].clientX-offsetX);
         touchY=parseInt(e.touches[1].clientY-offsetY);
-        //touchX=parseInt(e.touches[0].clientX-offsetX);
-        //touchY=parseInt(e.touches[0].clientY-offsetY);
+
         // set new thumb & redraw
         var new_r =r_color_slider.pct*255;
         var new_g =g_color_slider.pct*255;
@@ -418,7 +413,7 @@ function make_pencil_slider_dissapear(){
     redraw();
 }
 
-//Redraw all old stuff function
+//Redraw all old and new stuff function
 function redraw(){
     //Redraw background of canvas
     context.fillStyle = background;
@@ -618,6 +613,7 @@ function touchstart_rectangle(e){
             if(r.id>1 && !(r.fill === 'No fill')){
                 timer = setTimeout(function(){
                     c_rect_shape = r;
+                    console.log("Make slider appear for: " + r.id);
                     r.isSelected = false;
                     make_color_slider_appear(r.r_value,r.g,r.b);
                 }, 2000 );
@@ -772,7 +768,6 @@ function touchmove_circle(e){
         var my_1 = 0;
 
         if(gesture_or_not_circle){
-            //window.print("2 touches detected in circle!");
             mx_1 = parseInt(e.touches[1].clientX-offsetX);
             my_1 = parseInt(e.touches[1].clientY-offsetY);
             handle_resize_gesture_circle(mx,my,mx_1,my_1);
@@ -787,8 +782,8 @@ function touchmove_circle(e){
             var dy=my-startY_circle;
 
             // move each rect that isDragging 
-            // by the distance the mouse has moved
-            // since the last mousemove
+            // by the distance the touch has moved
+            // since the last touchmove
             for(var i=0;i<circles.length;i++){
                 var c=circles[i];
                 if(c.isDragging){
@@ -871,23 +866,23 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 //Pinch in gesture (Decrease size)
                 //Check for x
                 //If touch x coordinates is more than x position of rectangle then
-                // if(mx > r.x){
-                //     r.x = r.x + (mx-r.x);
-                //     r.width = r.width - (mx - old_x);
-                // }
-                // if(mx1 > r.x){
+                if(mx - r.x > 50 || mx1 - r.x > 50){
+                    r.x = r.x + 10;
+                    r.width = r.width - 10;
+                }
+                // if(mx1 - r.x > 50){
                 //     r.x = r.x + (mx1-r.x);
                 //     r.width = r.width - (mx1 - old_x);
                 // }
-                // //If touch x coordinates is less than x position + width of rectangle
-                // if(mx < (r.x + r.width)){
-                //     r.width = r.width - dx;
-                // }
+                //If touch x coordinates is less than x position + width of rectangle
+                if(r.x+r.width - mx > 50 || r.x+r.width - mx1 > 50{
+                    r.width = r.width - 10;
+                }
                 // if(mx1 < (r.x + r.width)){
                 //     r.width = r.width - dx_1;
                 // }
-                // //Check for y
-                // //If touch y coordinates is more than the y position of rectangle then
+                //Check for y
+                //If touch y coordinates is more than the y position of rectangle then
                 // if(my > r.y){
                 //     r.y = r.y + (my - r.y);
                 //     r.height = r.height - (my - old_y);
