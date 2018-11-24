@@ -151,6 +151,7 @@ function make_shape_toolbox(){
     circle(c.x,c.y,c.r,c.fill,c.stroke, c.rc, c.g, c.b);
 }
 
+//Test
 //Make rectangle shape function
 function rect(x,y,w,h,stroke,fill,r,g,b) {
     context.beginPath();
