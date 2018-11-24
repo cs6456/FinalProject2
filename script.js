@@ -589,6 +589,7 @@ function touchstart_rectangle(e){
     dragok_rectangle = false;
     for(var i=0;i<rects.length;i++){
         var r=rects[i];
+        var cur_id = r.id;
         if(mx>r.x && mx<r.x+r.width && my>r.y && my<r.y+r.height){
             first = true;
             // if yes, set that rects isDragging=true
@@ -613,6 +614,7 @@ function touchstart_rectangle(e){
             if(r.id>1 && !(r.fill === 'No fill')){
                 timer = setTimeout(function(){
                     c_rect_shape = r;
+                    console.log("cur_id: " + cur_id);
                     console.log("Make slider appear for: " + r.id);
                     r.isSelected = false;
                     make_color_slider_appear(r.r_value,r.g,r.b);
@@ -1255,6 +1257,7 @@ function clearCanvas() {
 
 function resetCanvas() {
     //background = context.fillStyle;
+    context.fillStyle = background;
     context.clearRect(0, 0, canvas.width, canvas.height);
     reset();
     make_shape_toolbox();
