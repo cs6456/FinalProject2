@@ -875,7 +875,7 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 //     r.width = r.width - (mx1 - old_x);
                 // }
                 //If touch x coordinates is less than x position + width of rectangle
-                if(r.x+r.width - mx > 50 || r.x+r.width - mx1 > 50{
+                if(r.x+r.width - mx > 50 || r.x+r.width - mx1 > 50){
                     r.width = r.width - 10;
                 }
                 // if(mx1 < (r.x + r.width)){
