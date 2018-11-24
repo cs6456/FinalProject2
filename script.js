@@ -866,24 +866,24 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 //Pinch in gesture (Decrease size)
                 //Check for x
                 //If touch x coordinates is more than x position of rectangle then
-                if(mx - r.x > 50 || mx1 - r.x > 50){
-                    r.x = r.x + 10;
-                    r.width = r.width - 10;
-                }
-                // if(mx1 - r.x > 50){
-                //     r.x = r.x + (mx1-r.x);
-                //     r.width = r.width - (mx1 - old_x);
+                // if(mx - r.x > 50 || mx1 - r.x > 50){
+                //     r.x = r.x + 10;
+                //     r.width = r.width - 10;
                 // }
-                //If touch x coordinates is less than x position + width of rectangle
-                if(r.x+r.width - mx > 50 || r.x+r.width - mx1 > 50){
-                    r.width = r.width - 10;
-                }
-                // if(mx1 < (r.x + r.width)){
-                //     r.width = r.width - dx_1;
+                // // if(mx1 - r.x > 50){
+                // //     r.x = r.x + (mx1-r.x);
+                // //     r.width = r.width - (mx1 - old_x);
+                // // }
+                // //If touch x coordinates is less than x position + width of rectangle
+                // if(r.x+r.width - mx > 50 || r.x+r.width - mx1 > 50){
+                //     r.width = r.width - 10;
                 // }
-                //Check for y
-                //If touch y coordinates is more than the y position of rectangle then
-                // if(my > r.y){
+                // // if(mx1 < (r.x + r.width)){
+                // //     r.width = r.width - dx_1;
+                // // }
+                // //Check for y
+                // //If touch y coordinates is more than the y position of rectangle then
+                // if(r.y - my > 50 ||){
                 //     r.y = r.y + (my - r.y);
                 //     r.height = r.height - (my - old_y);
                 // }
@@ -1259,53 +1259,6 @@ function resetCanvas() {
     reset();
     make_shape_toolbox();
 }
-
-//unction changeBrushStyle(brushStyle) {context.lineCap = brushStyle;}
-
-// function triggerClick() {document.getElementById('file').click();}
-
-// document.getElementById('file').addEventListener('change', function(e) {
-//     clearCanvas();
-//     URL = URL || webkitURL;
-//     var temp = URL.createObjectURL(e.target.files[0]);
-//     var image = new Image();
-//     image.src = temp;
-//     image.addEventListener('load', function() {
-//         imageWidth = image.naturalWidth;
-//         imageHeight = image.naturalHeight;
-//         newImageWidth = imageWidth;
-//         newImageHeight = imageHeight;
-//         originalImageRatio = imageWidth / imageHeight;
-//         if (newImageWidth > newImageHeight && newImageWidth > canvas.width) {
-//             newImageWidth = canvas.width;
-//             newImageHeight = canvas.width / originalImageRatio;
-//         }
-//         if (newImageHeight > newImageWidth && newImageHeight > canvas.height) {
-//             newImageHeight = canvas.height;
-//             newImageWidth = canvas.height * originalImageRatio;
-//         }
-//         if (newImageWidth == newImageHeight && newImageHeight > canvas.height) {
-//             newImageHeight = canvas.height;
-//             newImageWidth = canvas.height * originalImageRatio;
-//         }
-//         context.drawImage(image, 0, 0, newImageWidth, newImageHeight);//last two argument is x y original location where you want to put your img
-//         URL.revokeObjectURL(temp);// release the reference to this img
-//     });
-// });
-
-// function sideBarTouchStart(event) {
-//     sidebarStartX = event.touches[0].clientX;
-// }
-// function sideBarTouchEnd(event) {
-//     console.log(event.changedTouches[0].clientX);
-//     var changes = event.changedTouches[0].clientX;
-//     if (changes < 0) {
-//         console.log('hi');
-//         sidebar.style.left = '-300px';
-//     } else {
-//         sidebar.style.left = '0px';
-//     }
-// }
 
 //Function to reset all variables to normal
 function reset(){
