@@ -33,6 +33,9 @@ var starty0_clear;
 var starty1_clear;
 var starty2_clear;
 
+//variable flag to indicate closing shape toolbox
+var is_close_shape_toolbox = false;
+
 
 // an array of objects that define different rectangles
 var rects=[];
@@ -134,6 +137,14 @@ function init(){
 function make_shape_toolbox(){
     var r = rects[0];
     rect(r.x,r.y,r.width,r.height, r.stroke,"white",r.r_value,r.g,r.b);
+
+    rect(r.x + 130,r.y,20,20, r.stroke,"white",r.r_value,r.g,r.b); //For x button
+    context.fillStyle='black';
+    context.textAlign='center';
+    context.textBaseline='top';
+    context.font='20px arial';
+    context.fillText("X",r.x+140,r.y);
+
     //rect(r.x,r.y,r.width,r.height, r.stroke,"Change in rgb value",255,r.g,r.b);
     r = rects[1];
     rect(r.x,r.y,r.width,r.height, r.stroke,r.fill, r.r_value,r.g,r.b);
@@ -478,7 +489,9 @@ function redraw(){
     
 
     //Remake shape toolbox
-    make_shape_toolbox();
+    if(is_close_shape_toolbox == false){
+        make_shape_toolbox();
+    }
 }
 
 //handle touch start events for circles
@@ -954,6 +967,7 @@ function touchmove_rectangle(e){
                         r.y+=dy;
                     } 
                 }
+
             }
 
             // reset the starting touch position for the next touchmove
@@ -979,6 +993,18 @@ canvas.addEventListener('touchstart', function(e) {
     touchstart_colorSlider(e);
     //Perform touchstart events for pencilSlider
     touchstart_pencilSlider(e);
+
+    //Check if touching close button of shape toolbox
+    if(is_close_shape_toolbox == false){
+        var mx = e.touches[0].clientX - canvas.offsetLeft;
+        var my = e.touches[0].clientY - canvas.offsetTop;
+        //rect(165,r.y,20,20, r.stroke,"white",r.r_value,r.g,r.b); //For x button
+        var r = rects[0];
+        if(mx>r.x+130 && mx<r.x+150 && my>r.y && my<r.y+20){
+            console.log("Clicked close button");
+            is_close_shape_toolbox = true;
+        }
+    }
 
     //Detect 3 touches to indicate clear mode start
     if(e.touches.length === 3){
@@ -1076,6 +1102,11 @@ canvas.addEventListener('touchend', function(e) {
     }
 
     clearTimeout(timer);
+
+    if(is_close_shape_toolbox == true){
+        console.log("REACHED HERE!!");
+        redraw();
+    }
 
 });
 
@@ -1326,6 +1357,7 @@ function reset(){
     endX_crop = 0;
     endY_crop = 0;
     crop_count = 0;
+    is_close_shape_toolbox = false;
 }
 
 function fillCanvasModeStart(){
@@ -1346,5 +1378,10 @@ function pencilModeStart(){
 function cropModeStart(){
     curMode = 'crop';
     console.log('Mode change to crop');
+}
+
+function makeShapeToolBoxStart(){
+    is_close_shape_toolbox = false;
+    make_shape_toolbox();
 }
 

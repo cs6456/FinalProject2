@@ -48,7 +48,7 @@ button {
     height: 50px;
 }
 #otherTools button {
-    width: 25%;
+    width: 20%;
     height: 50px;
     margin-top: 5px;
     background: #303030;
@@ -62,6 +62,7 @@ button {
 #fillCanvas {font: 25px Impact;}
 #cropCanvas {font: 25px Impact;}
 #eraserButton {font: 25px Impact;}
+#shapeToolbox {font: 25px Impact;}
 
 
 
