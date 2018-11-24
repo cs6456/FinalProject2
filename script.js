@@ -23,6 +23,17 @@ var isDragging = false;
 var isSelecting_rectangle = false;
 var isSelecting_circle = false;
 
+//Variable flag to indicate clear or not
+var is_clear = false;
+var is_clear_touches = [];
+var startx0_clear;
+var startx1_clear;
+var startx2_clear;
+var starty0_clear;
+var starty1_clear;
+var starty2_clear;
+
+
 // an array of objects that define different rectangles
 var rects=[];
 var new_rectangle_made = false; //Flag to tell if a new rectangle is made or not
@@ -969,6 +980,17 @@ canvas.addEventListener('touchstart', function(e) {
     //Perform touchstart events for pencilSlider
     touchstart_pencilSlider(e);
 
+    //Detect 3 touches to indicate clear mode start
+    if(e.touches.length === 3){
+        startx0_clear = e.touches[0].clientX - canvas.offsetLeft;
+        starty0_clear = e.touches[0].clientY - canvas.offsetTop;
+        startx1_clear = e.touches[1].clientX - canvas.offsetLeft;
+        starty1_clear = e.touches[1].clientY - canvas.offsetTop;
+        startx2_clear = e.touches[2].clientX - canvas.offsetLeft;
+        starty2_clear = e.touches[2].clientY - canvas.offsetTop;
+        mode = 'clear';
+    }
+
     if (mode === 'pencil' || mode === 'eraser' || mode === 'crop'){
         //Remove all selections for rectangles
         if(isSelecting_rectangle == true){
@@ -1046,10 +1068,44 @@ canvas.addEventListener('touchend', function(e) {
 
     down = false;
     clearTimeout(timer);
+
+    if(is_clear == true){
+        is_clear = false;
+        resetCanvas();
+    } else {
+        is_clear = false;
+    }
 });
 
 function draw(e){
     //Modes
+
+    //Track gesture movement for clearing canvas
+    if(mode == 'clear' && e.touches.length === 3){
+        var is_clear_1 = false;
+        var is_clear_2 = false;
+        var is_clear_3 = false;
+        var mx0 = parseInt(e.touches[0].clientX-offsetX);
+        var mx1 = parseInt(e.touches[1].clientX-offsetX);
+        var mx2 = parseInt(e.touches[2].clientX-offsetX);
+        var my0 = parseInt(e.touches[0].clientY-offsetY);
+        var my1 = parseInt(e.touches[1].clientY-offsetY);
+        var my2 = parseInt(e.touches[2].clientY-offsetY);
+        if(startx0_clear - mx0 >= 75){
+            is_clear_1 = true;
+        }
+        if(startx1_clear - mx1 >= 75){
+            is_clear_2 = true;
+        }
+        if(startx2_clear - mx2 >= 75){
+            is_clear_3 = true;
+        }
+
+        if(is_clear_1 == true && is_clear_2 == true && is_clear_3 == true){
+            is_clear = true;
+        }
+    }
+
     if(dragok_circle || dragok_rectangle || mode === 'crop'){
         clearCanvas();
     }
@@ -1080,7 +1136,7 @@ function draw(e){
         endY_crop = my;
         context.beginPath();
         context.rect(startX_crop,startY_crop,(endX_crop - startX_crop),(endY_crop - startY_crop));
-        context.lineWidth = 10;
+        context.lineWidth = 3;
         context.strokeStyle = 'black';
         console.log("REACHED!");
         context.stroke();
@@ -1254,7 +1310,7 @@ function reset(){
     context.lineWidth = 5;
     down = false;
     mode = 'pencil';
-    background = 'white';
+    background = context.background;
     strokes = [];
     startX = 0;
     startY = 0;
