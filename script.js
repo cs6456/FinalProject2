@@ -1227,6 +1227,7 @@ function changeColor(color){
         pencilcolor = color;
     } else if (mode === 'fill'){
         background = color;
+        console.log(background);
         redraw();
     } else {
          //Change color of selected objects
@@ -1271,8 +1272,10 @@ function clearCanvas() {
 function resetCanvas() {
     //background = context.fillStyle;
     context.fillStyle = background;
+    console.log("In reset canvas (background): " + context.fillStyle);
     console.log("In reset canvas: " + context.fillStyle);
     clearCanvas();
+    console.log("In clear canvas (background): " + context.fillStyle);
     console.log("In clear canvas: " + context.fillStyle);
     reset();
     make_shape_toolbox();
@@ -1309,7 +1312,7 @@ function reset(){
     context.lineWidth = 5;
     down = false;
     mode = 'pencil';
-    background = context.background;
+    //background = context.background;
     strokes = [];
     startX = 0;
     startY = 0;
