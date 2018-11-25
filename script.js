@@ -1137,50 +1137,47 @@ function draw(e){
         }
     }
 
-    else {
-        if(dragok_circle || dragok_rectangle || mode === 'crop'){
-            clearCanvas();
-        }
-        console.log("In draw: " + context.fillStyle);
-        redraw();
-        console.log('mode: ' + mode)
-        if (mode === 'eraser') {
-            xPos = e.touches[0].clientX - canvas.offsetLeft;
-            yPos = e.touches[0].clientY - canvas.offsetTop;
-            if (down == true) {
-                objects.push({name:'eraser', id:eraser_strokes.length});
-                eraser_strokes.push({start_X:startX_eraser, start_Y: startY_eraser, end_X: xPos, end_Y: yPos});
-                startX_eraser = xPos;
-                startY_eraser = yPos;
-            }
-        } else if (mode === 'pencil'){
-            var xPos = e.touches[0].clientX - canvas.offsetLeft;
-            var yPos = e.touches[0].clientY - canvas.offsetTop;
-            if (down == true) {
-                objects.push({name:'pencil', id:strokes.length});
-                strokes.push({start_X:startX, start_Y: startY, end_X: xPos, end_Y: yPos, strokecolor: pencilcolor, line_width: pencil_width});
-                startX = xPos;
-                startY = yPos;
-            }
-        }  else if (mode === 'crop'){
-            var mx=parseInt(e.touches[0].clientX-offsetX);
-            var my=parseInt(e.touches[0].clientY-offsetY);
-            endX_crop = mx;
-            endY_crop = my;
-            context.beginPath();
-            context.rect(startX_crop,startY_crop,(endX_crop - startX_crop),(endY_crop - startY_crop));
-            context.lineWidth = 3;
-            context.strokeStyle = 'black';
-            console.log("REACHED!");
-            context.stroke();
-            context.closePath();
-        }
-
-        touchmove_rectangle(e);
-        touchmove_circle(e);
-        touchmove_colorSlider(e);
-        touchmove_pencilSlider(e);
+    if(dragok_circle || dragok_rectangle || mode === 'crop'){
+        clearCanvas();
     }
+    redraw();
+    console.log('mode: ' + mode)
+    if (mode === 'eraser') {
+        xPos = e.touches[0].clientX - canvas.offsetLeft;
+        yPos = e.touches[0].clientY - canvas.offsetTop;
+        if (down == true) {
+            objects.push({name:'eraser', id:eraser_strokes.length});
+            eraser_strokes.push({start_X:startX_eraser, start_Y: startY_eraser, end_X: xPos, end_Y: yPos});
+            startX_eraser = xPos;
+            startY_eraser = yPos;
+        }
+    } else if (mode === 'pencil'){
+        var xPos = e.touches[0].clientX - canvas.offsetLeft;
+        var yPos = e.touches[0].clientY - canvas.offsetTop;
+        if (down == true) {
+            objects.push({name:'pencil', id:strokes.length});
+            strokes.push({start_X:startX, start_Y: startY, end_X: xPos, end_Y: yPos, strokecolor: pencilcolor, line_width: pencil_width});
+            startX = xPos;
+            startY = yPos;
+        }
+    }  else if (mode === 'crop'){
+        var mx=parseInt(e.touches[0].clientX-offsetX);
+        var my=parseInt(e.touches[0].clientY-offsetY);
+        endX_crop = mx;
+        endY_crop = my;
+        context.beginPath();
+        context.rect(startX_crop,startY_crop,(endX_crop - startX_crop),(endY_crop - startY_crop));
+        context.lineWidth = 3;
+        context.strokeStyle = 'black';
+        console.log("REACHED!");
+        context.stroke();
+        context.closePath();
+    }
+
+    touchmove_rectangle(e);
+    touchmove_circle(e);
+    touchmove_colorSlider(e);
+    touchmove_pencilSlider(e);
     clearTimeout(timer);
     //redraw();
 }
@@ -1262,16 +1259,10 @@ function clearCanvas() {
 function resetCanvas() {
     //background = context.fillStyle;
     context.fillStyle = background;
-    console.log("I AM IN RESET CANVAS");
+    console.log(context.fillStyle);
     clearCanvas();
-    console.log("I AM IN RESET CANVAS2");
-
     reset();
-    console.log("I AM IN RESET CANVAS3");
-
     make_shape_toolbox();
-    console.log("I AM IN RESET CANVAS4");
-
 }
 
 //Function to reset all variables to normal
