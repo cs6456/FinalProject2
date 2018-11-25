@@ -1259,11 +1259,16 @@ function clearCanvas() {
 function resetCanvas() {
     //background = context.fillStyle;
     context.fillStyle = background;
-    console.log(context.fillStyle);
-    context.rect(0, 0, canvas.width, canvas.height);
-    context.fill();
+    console.log("I AM IN RESET CANVAS");
+    clearCanvas();
+    console.log("I AM IN RESET CANVAS2");
+
     reset();
-    //make_shape_toolbox();
+    console.log("I AM IN RESET CANVAS3");
+
+    make_shape_toolbox();
+    console.log("I AM IN RESET CANVAS4");
+
 }
 
 //Function to reset all variables to normal
