@@ -1262,6 +1262,7 @@ function resetCanvas() {
     context.fillStyle = background;
     console.log("In reset canvas: " + context.fillStyle);
     clearCanvas();
+    console.log("In clear canvas: " + context.fillStyle);
     reset();
     make_shape_toolbox();
 }
