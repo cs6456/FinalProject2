@@ -1102,7 +1102,7 @@ canvas.addEventListener('touchend', function(e) {
     clearTimeout(timer);
 
     if(is_close_shape_toolbox == true){
-        console.log("REACHED HERE!!");
+        //console.log("REACHED HERE!!");
         redraw();
     }
 
