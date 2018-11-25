@@ -861,12 +861,12 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 //Pinch in gesture (Decrease size)
                 //Check for x
                 //If touch x coordinates is more than x position of rectangle then
-                if(mx - r.x > 150){
-                    r.x = r.x + 25;
-                    r.width = r.width - 25;
+                if(mx - r.x > 125){
+                    r.x = r.x + 30;
+                    r.width = r.width - 30;
                 }
-                if((r.x+r.width) - mx1 > 150){
-                    r.width = r.width - 25;
+                if((r.x+r.width) - mx1 > 125){
+                    r.width = r.width - 30;
                 }
                 // //If touch x coordinates is less than x position + width of rectangle
                 // if(r.x+r.width - mx > 50 || r.x+r.width - mx1 > 50){
@@ -877,12 +877,12 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 // // }
                 //Check for y
                 //If touch y coordinates is more than the y position of rectangle then
-                if(my1 - r.y > 150){
-                    r.y = r.y + 25;
-                    r.height = r.height - 25;
+                if(my1 - r.y > 125){
+                    r.y = r.y + 30;
+                    r.height = r.height - 30;
                 }
-                if((r.y + r.height) - my > 150){
-                    r.height = r.height - 25;
+                if((r.y + r.height) - my > 125){
+                    r.height = r.height - 30;
                 }
                 // //If touch y coordinates is less than y position + height of rectangle
                 // if(my < (r.y + r.height)){
