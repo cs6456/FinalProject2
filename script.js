@@ -1263,7 +1263,7 @@ function resetCanvas() {
     context.rect(0, 0, canvas.width, canvas.height);
     context.fill();
     reset();
-    make_shape_toolbox();
+    //make_shape_toolbox();
 }
 
 //Function to reset all variables to normal
