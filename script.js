@@ -1095,6 +1095,7 @@ canvas.addEventListener('touchend', function(e) {
     if(is_clear == true){
         is_clear = false;
         resetCanvas();
+        console.log("After reset canvas: " + context.fillStyle);
     } else {
         is_clear = false;
     }
@@ -1259,7 +1260,7 @@ function clearCanvas() {
 function resetCanvas() {
     //background = context.fillStyle;
     context.fillStyle = background;
-    console.log(context.fillStyle);
+    console.log("In reset canvas: " + context.fillStyle);
     clearCanvas();
     reset();
     make_shape_toolbox();
