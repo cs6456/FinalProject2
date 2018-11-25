@@ -861,12 +861,12 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 //Pinch in gesture (Decrease size)
                 //Check for x
                 //If touch x coordinates is more than x position of rectangle then
-                if(mx - r.x > 200){
-                    r.x = r.x + 20;
-                    r.width = r.width - 20;
+                if(mx - r.x > 150){
+                    r.x = r.x + 25;
+                    r.width = r.width - 25;
                 }
-                if((r.x+r.width) - mx1 > 200){
-                    r.width = r.width - 20;
+                if((r.x+r.width) - mx1 > 150){
+                    r.width = r.width - 25;
                 }
                 // //If touch x coordinates is less than x position + width of rectangle
                 // if(r.x+r.width - mx > 50 || r.x+r.width - mx1 > 50){
@@ -875,16 +875,15 @@ function handle_resize_gesture_rectangle(mx, my, mx1, my1){
                 // // if(mx1 < (r.x + r.width)){
                 // //     r.width = r.width - dx_1;
                 // // }
-                // //Check for y
-                // //If touch y coordinates is more than the y position of rectangle then
-                // if(r.y - my > 50 ||){
-                //     r.y = r.y + (my - r.y);
-                //     r.height = r.height - (my - old_y);
-                // }
-                // if(my1 > r.y){
-                //     r.y = r.y + (my1 - r.y);
-                //     r.height = r.height - (my1 - old_y);
-                // }
+                //Check for y
+                //If touch y coordinates is more than the y position of rectangle then
+                if(my1 - r.y > 150){
+                    r.y = r.y + 25;
+                    r.height = r.height - 25;
+                }
+                if((r.y + r.height) - my > 150){
+                    r.height = r.height - 25;
+                }
                 // //If touch y coordinates is less than y position + height of rectangle
                 // if(my < (r.y + r.height)){
                 //     r.height = r.height - dy;
