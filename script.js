@@ -1095,17 +1095,12 @@ canvas.addEventListener('touchend', function(e) {
     if(is_clear == true){
         is_clear = false;
         resetCanvas();
-        console.log("After reset canvas: " + context.fillStyle);
         if(context.fillStyle === '#000000'){
-            console.log("REACHED HERE!!");
-            console.log("Background: " + background);
             context.fillStyle = background;
             context.beginPath();
             context.rect(0,0,canvas.width, canvas.height);
             context.closePath();
-            console.log("Fill style: " + context.fillStyle);
             context.fill();
-            //context.clearRect(0, 0, canvas.width, canvas.height);
         }
     } else {
         is_clear = false;
@@ -1299,6 +1294,8 @@ function reset(){
     startY_rectangle = 0;
     startX1_rectangle = 0;
     startY1_rectangle = 0;
+    c_rect_shape = null;
+    c_circle_shape = null;
     circles = [];
     new_circle_made = false; //Flag to tell if a new circle is made or not
     circle_count = 1;  // Count number of circles -> is the id of each rectangle
