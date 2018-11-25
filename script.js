@@ -1141,6 +1141,7 @@ function draw(e){
         if(dragok_circle || dragok_rectangle || mode === 'crop'){
             clearCanvas();
         }
+        console.log("In draw: " + context.fillStyle);
         redraw();
         console.log('mode: ' + mode)
         if (mode === 'eraser') {
