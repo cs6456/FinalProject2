@@ -1,8 +1,3 @@
-// //Variables for sidebar
-// var sidebar = document.getElementById('sidebar');
-// var sidebarStartX;
-// var sidebarEndX;
-
 //Variables to store canvas information
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
@@ -105,9 +100,6 @@ var crop_count = 0;
 
 //Variables for color slider
 //Put information for r, g, and b color sliders
-// var r_color_slider=makeRangeControl(50,500,200,25);
-// var g_color_slider=makeRangeControl(50,530,200,25);
-// var b_color_slider=makeRangeControl(50,560,200,25);
 var r_color_slider=makeRangeControl(50,300,200,25, "red");
 var g_color_slider=makeRangeControl(50,350,200,25, "green");
 var b_color_slider=makeRangeControl(50,400,200,25, "blue");
@@ -1109,15 +1101,13 @@ canvas.addEventListener('touchend', function(e) {
     clearTimeout(timer);
 
     if(is_close_shape_toolbox == true){
-        //console.log("REACHED HERE!!");
         redraw();
     }
 
 });
 
+//Function to draw
 function draw(e){
-    //Modes
-
     //Track gesture movement for clearing canvas
     if(mode == 'clear' && e.touches.length === 3){
         var is_clear_1 = false;
@@ -1186,9 +1176,9 @@ function draw(e){
     touchmove_colorSlider(e);
     touchmove_pencilSlider(e);
     clearTimeout(timer);
-    //redraw();
 }
 
+//Function for changing colors
 function changeColor(color){
     //context.strokeStyle = color;
     var red = 0;
@@ -1250,20 +1240,15 @@ function changeColor(color){
             }
             redraw();
         }
-    }
-
-   
-    //context.fillStyle = color;
+    }   
 }
 
+//Clears the canvas
 function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// function changeBrushSize(size) {
-//     context.lineWidth = size;
-// }
-
+//Resets canvas
 function resetCanvas() {
     //background = context.fillStyle;
     context.fillStyle = background;
@@ -1326,26 +1311,31 @@ function reset(){
     is_close_shape_toolbox = false;
 }
 
+//Starts fill canvas mode
 function fillCanvasModeStart(){
     mode = 'fill';
     console.log('Mode change to fill');
 }
 
+//Starts eraser mode
 function eraserModeStart(){
     curMode = 'eraser';
     console.log('Mode change to eraser');
 }
 
+//Starts pencil mode
 function pencilModeStart(){
     curMode = 'pencil';
     console.log('Mode change to pencil');
 }
 
+//Starts crop mode
 function cropModeStart(){
     curMode = 'crop';
     console.log('Mode change to crop');
 }
 
+//Make shape toolbox 
 function makeShapeToolBoxStart(){
     is_close_shape_toolbox = false;
     make_shape_toolbox();
