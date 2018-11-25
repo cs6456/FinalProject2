@@ -1259,6 +1259,7 @@ function clearCanvas() {
 function resetCanvas() {
     //background = context.fillStyle;
     context.fillStyle = background;
+    console.log(context.fillStyle);
     context.clearRect(0, 0, canvas.width, canvas.height);
     reset();
     make_shape_toolbox();
