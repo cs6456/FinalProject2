@@ -1098,8 +1098,14 @@ canvas.addEventListener('touchend', function(e) {
         console.log("After reset canvas: " + context.fillStyle);
         if(context.fillStyle === '#000000'){
             console.log("REACHED HERE!!");
+            console.log("Background: " + background);
             context.fillStyle = background;
-            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.beginPath();
+            context.rect(0,0,canvas.width, canvas.height);
+            context.closePath();
+            console.log("Fill style: " + context.fillStyle);
+            context.fill();
+            //context.clearRect(0, 0, canvas.width, canvas.height);
         }
     } else {
         is_clear = false;
